@@ -32,15 +32,22 @@ def main():
             page.screenshot(path=str(SHOT_DIR / f"verify_{name}.png"), full_page=False)
             print(f"[{name}] overflow={overflow} | score='{score_txt}' | runs='{runs_txt}' | "
                   f"checks={defects_rows} | wa_questions={wa_rows} | github_repos={repo_cards} | history_turns={hist_rows}")
-            assert not overflow, f"Yatay taşma tespit edildi: {name}"
-            assert "100" in score_txt and ".." not in score_txt, f"Veri yüklenmedi: {score_txt}"
-            assert defects_rows >= 20, f"Kontrol tablosu eksik: {defects_rows}"
-            assert wa_rows >= 30, f"WhatsApp jüri tablosu eksik: {wa_rows}"
-            assert repo_cards >= 7, f"GitHub repo kartları eksik: {repo_cards}"
-            assert hist_rows >= 2, f"Birikimli geçmiş turları eksik: {hist_rows}"
+            if overflow:
+                raise RuntimeError(f"Yatay taşma tespit edildi: {name}")
+            if "100" not in score_txt or ".." in score_txt:
+                raise RuntimeError(f"Veri yüklenmedi: {score_txt}")
+            if defects_rows < 20:
+                raise RuntimeError(f"Kontrol tablosu eksik: {defects_rows}")
+            if wa_rows < 30:
+                raise RuntimeError(f"WhatsApp jüri tablosu eksik: {wa_rows}")
+            if repo_cards < 7:
+                raise RuntimeError(f"GitHub repo kartları eksik: {repo_cards}")
+            if hist_rows < 2:
+                raise RuntimeError(f"Birikimli geçmiş turları eksik: {hist_rows}")
             ctx.close()
         browser.close()
-    assert not console_errors, f"Console hataları: {console_errors}"
+    if console_errors:
+        raise RuntimeError(f"Console hataları: {console_errors}")
     print("[PASS] Playwright 1440x900 + 390x844 doğrulaması sıfır hata ve sıfır taşma ile geçti!")
 
 

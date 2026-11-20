@@ -22,7 +22,6 @@ import random
 import re
 import subprocess
 import sys
-import time
 import zipfile
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -322,7 +321,7 @@ def run_real_user_playwright_exploration(
     """
     from playwright.sync_api import sync_playwright
 
-    rng = random.Random(formation["seed_int"])
+    rng = random.Random(formation["seed_int"])  # noqa: S311
     picked_tooth = rng.choice([11, 14, 16, 18, 21, 24, 26, 36, 46, 55, 65, 75, 85])
     picked_surface = rng.choice(SURFACES)
     picked_status = rng.choice(["planned", "caries", "treated", "crown", "implant", "root_canal"])
@@ -413,9 +412,9 @@ def run_real_user_playwright_exploration(
                     # 1 kez geçici 404 enjekte edip "Tekrar dene" hata kurtarma butonunu gerçek DOM'da doğrula
                     once_flag = {"hit": False}
 
-                    def _mock_costs_once(route_obj):
-                        if not once_flag["hit"]:
-                            once_flag["hit"] = True
+                    def _mock_costs_once(route_obj, flag=once_flag):
+                        if not flag["hit"]:
+                            flag["hit"] = True
                             route_obj.fulfill(
                                 status=404,
                                 content_type="application/json",
@@ -801,11 +800,13 @@ def run_real_user_playwright_exploration(
                 total_button_interactions += 1
                 d_page.wait_for_timeout(220)
 
-            drawer_stats = d_page.evaluate("""() => {
+            _drawer_opened = d_page.evaluate("""() => {
                 const openBtn = Array.from(document.querySelectorAll('#panel-main button')).find(b => b.innerText.trim() === 'Aç');
                 if (openBtn) openBtn.click();
                 return !!openBtn;
             }""")
+            if _drawer_opened:
+                total_button_interactions += 1
             d_page.wait_for_timeout(380)
 
             # Hasta kartı içinde "Göster" (şifreli telefon çöz + denetim kaydı) + "Anamnez gönder" ("Formu Aç" linki)
@@ -1084,7 +1085,7 @@ def run_polymorphic_api_and_security_fuzzer(
     - Kasa ters tarih aralığı (start > end) -> HTTP 422 dönmeli.
     - Kliniğe özel AI kuralları (ai_custom_rules_json) -> farklı politikalar kaydedilip simülatörde doğrulanmalı.
     """
-    rng = random.Random(formation["seed_int"])
+    rng = random.Random(formation["seed_int"])  # noqa: S311
     total_fuzz_calls = 0
     unexpected_500s: list[str] = []
     invariant_failures: list[str] = []
@@ -1216,7 +1217,7 @@ def run_bandit_sast_and_parity_audit(dentacore_dir: Path, nb, formation: dict[st
     PyCQA/Bandit ile DentaCore Python kod tabanını (api/app/*.py ve run_local.py) AST seviyesinde tarar;
     Orta/Yüksek (Medium/High) güvenlik açığı olup olmadığını ve SQLite <-> PostgreSQL route paritesini denetler.
     """
-    res = subprocess.run(
+    res = subprocess.run(  # noqa: S603
         [
             sys.executable,
             "-m",
@@ -1232,7 +1233,7 @@ def run_bandit_sast_and_parity_audit(dentacore_dir: Path, nb, formation: dict[st
         capture_output=True,
         text=True,
     )
-    ruff_res = subprocess.run(
+    ruff_res = subprocess.run(  # noqa: S603
         [
             sys.executable,
             "-m",
@@ -1308,7 +1309,7 @@ def generate_hourly_polymorphic_wa_questions(run_number: int) -> list[dict[str, 
     16 yeni düşman ve müşteri WhatsApp sorusu üretir.
     """
     formation = get_active_formation(run_number)
-    rng = random.Random(formation["seed_int"])
+    rng = random.Random(formation["seed_int"])  # noqa: S311
 
     treatments_tr = [
         ("implant", "İmplant"),

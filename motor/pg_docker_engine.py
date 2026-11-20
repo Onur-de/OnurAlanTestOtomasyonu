@@ -218,7 +218,7 @@ def run_docker_postgres_verification(
         )
 
         def _race_worker(w_id: int) -> bool:
-            sql_w = f"INSERT INTO _sentinel_acid_race (slot_key, worker_id) VALUES ('2027-05-01T10:00_CHAIR1', {w_id});"
+            sql_w = f"INSERT INTO _sentinel_acid_race (slot_key, worker_id) VALUES ('2027-05-01T10:00_CHAIR1', {int(w_id)});"  # noqa: S608
             rc_w, _, _ = _psql_exec(cname, sql_w, timeout=12)
             return rc_w == 0
 

@@ -21,13 +21,14 @@ Amacı:
 from __future__ import annotations
 
 import hashlib
-import hmac
 import json
+import logging
 import random
 import sys
-import time
 from datetime import datetime, timedelta
 from pathlib import Path
+
+LOG = logging.getLogger(__name__)
 from typing import Any
 from zoneinfo import ZoneInfo
 
@@ -161,8 +162,8 @@ def load_hash_vault() -> dict[str, Any]:
     if HASH_VAULT_PATH.exists():
         try:
             return json.loads(HASH_VAULT_PATH.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except Exception as exc:
+            LOG.debug("Hash vault okunamadı: %s", exc)
     return {"week_epoch": 1, "hours_completed": [], "seen_hashes": [], "method_history": []}
 
 
@@ -256,7 +257,7 @@ def execute_hourly_distinct_methodology_suite(
     vault = load_hash_vault()
     plan = get_168h_slot_plan(run_number)
     vault["week_epoch"] = plan["week_epoch"]
-    rng = random.Random(plan["seed_int"])
+    rng = random.Random(plan["seed_int"])  # noqa: S311
 
     new_unique_count = 0
 
@@ -999,7 +1000,7 @@ def execute_hourly_distinct_methodology_suite(
     if r_all_ics.status_code != 200 or "BEGIN:VCALENDAR" not in r_all_ics.text:
         full96_failures.append(f"/app/api/calendar/all.ics başarısız: {r_all_ics.status_code}")
     if r_cal_rot.status_code != 200 or (old_ics_path and c_owner.get(old_ics_path).status_code != 403):
-        full96_failures.append(f"/app/api/calendar-links/rotate eski tokeni geçersiz kılmadı")
+        full96_failures.append("/app/api/calendar-links/rotate eski tokeni geçersiz kılmadı")
 
     # H4. Bekleme Listesi Dalga Teklifleri, Scheduler Tick, Reminders & EVET/HAYIR Otomasyon Döngüsü (5 uç)
     r_wo = c_owner.get("/app/api/waitlist/offers")

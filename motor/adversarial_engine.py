@@ -24,10 +24,12 @@ import json
 import os
 import shutil
 import sqlite3
+import logging
 import subprocess
 import sys
-import tempfile
 import time
+
+LOG = logging.getLogger(__name__)
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -63,7 +65,6 @@ from polymorphic_formations import (  # noqa: E402
 )
 from weekly_168h_curriculum import (  # noqa: E402
     execute_hourly_distinct_methodology_suite,
-    get_168h_slot_plan,
 )
 from pg_docker_engine import run_docker_postgres_verification  # noqa: E402
 from devsecops_local_scanners import (  # noqa: E402
@@ -280,17 +281,17 @@ def run_hourly_adversarial_simulation(
             if line.strip():
                 try:
                     past_runs.append(json.loads(line))
-                except Exception:
-                    pass
+                except Exception as exc:
+                    LOG.debug("Geçmiş tur satırı atlandı: %s", exc)
 
     run_number = len(past_runs) + 1
     now_dt = datetime.now(TZ)
     run_id = f"RUN-{now_dt.strftime('%Y%m%d-%H%M%S')}-T{run_number:02d}"
     nb = EnemyNotebook(run_id, run_number)
 
-    print(f"\n================================================================================")
+    print("\n================================================================================")
     print(f"🔥 DENTACORE SAATLİK DÜŞMAN SİMÜLASYONU BAŞLADI | {run_id} (Tur #{run_number})")
-    print(f"================================================================================")
+    print("================================================================================")
 
     sandbox_dir, secrets_data = _prepare_isolated_sandbox()
     port = 18792
@@ -304,7 +305,7 @@ def run_hourly_adversarial_simulation(
     # Test determinizmi ve hız için OmniRoute zaman aşımını engelle
     env["LLM_BASE_URL"] = ""
 
-    proc = subprocess.Popen(
+    proc = subprocess.Popen(  # noqa: S603
         [str(PYTHON_EXE), "-X", "utf8", str(sandbox_dir / "run_local.py")],
         cwd=str(sandbox_dir),
         env=env,
@@ -539,7 +540,7 @@ def run_hourly_adversarial_simulation(
             nb.add_check(
                 "ADV-BIZ-03", "Düşman İş Mantığı", "Diş Hekimi Persona",
                 "Odontogram (FDI #11-#48 / #51-#85 Diş ve 5 Yüzey M/D/O/B/L) CRUD & İzolasyon",
-                "PASS", 10.0, f"Diş #16 (O) kaydedildi, listelendi, Bursa IDOR=404 ile engellendi ve temizlendi."
+                "PASS", 10.0, "Diş #16 (O) kaydedildi, listelendi, Bursa IDOR=404 ile engellendi ve temizlendi."
             )
 
         # 2.4 TUZAK-4: Hizmet Borçlandırmada (Charges) Idempotency & Sıfır Borçlu Hastadan Bakiye Üstü / Avans Tahsilat Koruması
@@ -566,7 +567,7 @@ def run_hourly_adversarial_simulation(
             nb.add_check(
                 "ADV-BIZ-04", "Düşman İş Mantığı", "Kasa Denetçisi",
                 "Muhasebe Mükerrer Borç (HTTP 409) & Bakiye Üstü Avans Onay Koruması (HTTP 422)",
-                "PASS", 10.0, f"Onaysız aşırı tahsilat=422, onaylı avans=200, çift tıklama borç=409."
+                "PASS", 10.0, "Onaysız aşırı tahsilat=422, onaylı avans=200, çift tıklama borç=409."
             )
 
         # 2.5 TUZAK-5: WhatsApp Webhook Çok Şubeli Eşleme (Eşleşmeyen Reddedilmeli + Eşleşen Router & DB'ye İşlenmeli)
@@ -702,7 +703,7 @@ def run_hourly_adversarial_simulation(
             "RACE-04", "Eşzamanlılık & Yarış", "POS Çift Çekim Simülatörü",
             "Aynı Idempotency Anahtarıyla 6 Eşzamanlı Kredi Kartı Tahsilat Saldırısı",
             "PASS" if ok_pay_race else "FAIL", 10.0 if ok_pay_race else 0.0,
-            f"1 ödeme işlendi (HTTP 200), 5 mükerrer istek reddedildi (HTTP 409).",
+            "1 ödeme işlendi (HTTP 200), 5 mükerrer istek reddedildi (HTTP 409).",
         )
 
         # =========================================================================
@@ -885,7 +886,7 @@ def run_hourly_adversarial_simulation(
             "FAZ 2A Jailbreak, Hamile/Çocuk Doz Koruması ve Çok Dilli Acil Triyaj Canlı Doğrulaması",
             "PASS" if not faz2_fail else "FAIL",
             10.0 if not faz2_fail else 2.0,
-            f"4/4 kalkan geçti" if not faz2_fail else "; ".join(faz2_fail),
+            "4/4 kalkan geçti" if not faz2_fail else "; ".join(faz2_fail),
             severity="Kritik",
             file_ref="4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py",
         )
@@ -1220,11 +1221,11 @@ def run_hourly_adversarial_simulation(
         mirror_dst = TARGET_ROOT / "DENTACORE-QA" / "adversarial_sentinel"
         safe_sync_to_mirror(mirror_dst, execute=True)
 
-    print(f"\n================================================================================")
+    print("\n================================================================================")
     print(f"✅ TUR #{run_number} TAMAMLANDI | GENEL NOT: {overall_score}/100 ({grade_letter}) | Değişim: {delta_str}")
     print(f"📒 Birikimli Not Defteri Güncellendi: {LEDGER_PATH}")
     print(f"🎛️ Birleşik Komuta Merkezi Güncellendi: {unified_path}")
-    print(f"================================================================================\n")
+    print("================================================================================\n")
     return run_summary
 
 
