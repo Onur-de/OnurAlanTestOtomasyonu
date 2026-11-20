@@ -1,0 +1,16 @@
+{
+  "last_run_number": 2,
+  "current_week_epoch": 1,
+  "current_slot_168": 2,
+  "remaining_unique_hours_in_week": 166,
+  "total_unique_payload_hashes_stored": 8,
+  "active_day_title": "GÜN 1 (Saat 01-24): Gerçek Kullanıcı Tarayıcı, Monkey DOM & 24 Cihaz/Zoom Gezgini",
+  "active_submethod_1": {
+    "code": "SUB-02",
+    "description": "5-Turlu Gurbetçi Hasta Sohbet Ağacı (Selam -> Şube -> Tedavi Süresi -> Fiyat/Nakit -> Randevu Saati Bağlama)"
+  },
+  "active_submethod_2": {
+    "code": "SUB-07",
+    "description": "NVIDIA Garak Görünmez Unicode (Zero-Width/Soft-Hyphen/Bidi) & Leetspeak İlaç/Doz Sızma Fırtınası"
+  }
+}

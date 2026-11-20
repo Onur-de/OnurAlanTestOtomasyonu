@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DentaCore Kurumsal Otomasyon Sistemi saatlik düşman simülasyonu, WhatsApp bot jüri oylaması ve GitHub mimari radar kontrol paneli.">
+  <title>DentaCore Adversarial Sentinel: Saatlik Düşman Simülasyonu ve Jüri Paneli</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Hallmark · shape: dashboard · genre: modern-minimal · theme: Console (deal 2/3, seed cybersecurity-red-team-telemetry-29a9·aec816b4·2026-11-18·r0) · job: try · draw: aec816b4
+     * hero: stage · nav: topbar · footer: ledger · imagery: none · signature: tabular-audit · console: live-countdown
+     * axes: dark/grotesk-sans/chromatic-amber · posture: restrained · contrast: pass · fold: pass · v2.0.0 */
+    /* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: S, tightened 4px scale and tabular mono figures */
+    :root {
+      --bg-canvas: #050914;
+      --bg-surface: #0D1322;
+      --bg-elevated: #151D30;
+      --bg-subtle: #202B42;
+      --text-primary: #F4F7FB;
+      --text-secondary: #C7D2E2;
+      --text-muted: #8D9CB2;
+      --border-default: #2C3A52;
+      --border-strong: #415576;
+      --accent-green: #38E592;
+      --accent-green-ink: #020408;
+      --accent-green-soft: rgba(56, 229, 146, 0.14);
+      --accent-red: #F25C69;
+      --accent-red-soft: rgba(242, 92, 105, 0.16);
+      --accent-amber: #F5B742;
+      --accent-amber-soft: rgba(245, 183, 66, 0.16);
+      --accent-teal: #34D1BF;
+      --accent-teal-soft: rgba(52, 209, 191, 0.16);
+      --focus-ring: #34D1BF;
+      --font-sans: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-mono: 'Fira Code', Consolas, monospace;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 4px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: clip;
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 24px 20px 64px;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background-color: var(--accent-red-soft);
+      border: 1px solid var(--accent-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-red);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      margin: 4px 0 0;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--accent-green);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-strong);
+      background-color: transparent;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-teal);
+      background-color: var(--bg-elevated);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-green);
+      border-color: var(--accent-green);
+      color: var(--accent-green-ink);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-teal);
+      border-color: var(--accent-teal);
+      color: var(--accent-green-ink);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .kpi-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    .kpi-foot {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .bar-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--bg-subtle);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background-color: var(--accent-teal);
+      transform-origin: left center;
+      transition: transform 0.25s ease;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 28px 0 16px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-default);
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    .chip:hover, .chip.active {
+      background-color: var(--accent-teal-soft);
+      border-color: var(--accent-teal);
+      color: var(--accent-teal);
+    }
+
+    .chip:active {
+      transform: translateY(1px);
+    }
+
+    .chip:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      margin-bottom: 28px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+      font-weight: 600;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-default);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-default);
+      vertical-align: top;
+      color: var(--text-primary);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge-fail {
+      background-color: var(--accent-red-soft);
+      color: var(--accent-red);
+      border: 1px solid var(--accent-red);
+    }
+
+    .badge-pass {
+      background-color: var(--accent-green-soft);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+    }
+
+    .badge-warn {
+      background-color: var(--accent-amber-soft);
+      color: var(--accent-amber);
+      border: 1px solid var(--accent-amber);
+    }
+
+    .code-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-teal);
+      background-color: var(--accent-teal-soft);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+    }
+
+    .repo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .repo-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 8px;
+      font-family: var(--font-mono);
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    .repo-link {
+      color: var(--accent-teal);
+      text-decoration: none;
+    }
+
+    .repo-link:hover {
+      text-decoration: underline;
+    }
+
+    .recipe-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-default);
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+    }
+
+    .top-findings-board {
+      background-color: var(--bg-surface);
+      border: 2px solid var(--accent-teal);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .top-findings-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .top-findings-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .top-alert-strip {
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-elevated);
+    }
+
+    .top-alert-strip.is-clean {
+      border-color: var(--accent-green);
+      background-color: var(--accent-green-soft);
+    }
+
+    .top-alert-strip.has-issues {
+      border-color: var(--accent-amber);
+      background-color: var(--accent-amber-soft);
+    }
+
+    .top-alert-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      margin-bottom: 8px;
+    }
+
+    .top-defect-list {
+      margin: 8px 0 0;
+      padding-left: 20px;
+      display: grid;
+      gap: 8px;
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 16px 12px 48px;
+      }
+      .topbar {
+        padding: 16px;
+      }
+      .kpi-value {
+        font-size: 1.6rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <div class="brand-group">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">DentaCore Adversarial Sentinel v1.0</h1>
+          <p class="brand-sub">Kurumsal Otomasyon Sistemi Saatlik Düşman Simülasyonu, WhatsApp Jüri Oylaması ve GitHub Radarı</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="status-pill" id="timer-pill">
+          <span class="pulse-dot"></span>
+          <span id="next-run-label">Sonraki Tur: 59:40</span>
+        </div>
+        <button type="button" class="btn btn-primary" id="run-now-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Simülasyonu Başlat</span>
+        </button>
+        <a class="btn" href="BIRLESIK_KOMUTA_MERKEZI.html">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Birleşik Merkez</span>
+        </a>
+        <a class="btn" href="SAATLIK_NOT_VE_EKSIK_DEFTERI.md" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+          </svg>
+          <span>Not Defteri (.md)</span>
+        </a>
+      </div>
+    </header>
+
+    <section class="top-findings-board" aria-label="Canlı Saat, Hata, Eksik ve Bulgu Akışı">
+      <div class="top-findings-head">
+        <h2 class="top-findings-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Canlı Saat, Hata, Eksik ve Bulgu Akışı (En Yeni En Üstte)</span>
+        </h2>
+        <span class="status-pill" id="top-last-ts">Son Koşu: Bekleniyor…</span>
+      </div>
+      <div class="top-alert-strip" id="top-latest-summary">Veri yükleniyor…</div>
+      <div class="table-wrap" style="margin-bottom:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Tarih ve Saat</th>
+              <th>Tur</th>
+              <th>Genel Not</th>
+              <th>Hata / Eksik</th>
+              <th>Yakalanan Bulgular Özeti</th>
+            </tr>
+          </thead>
+          <tbody id="top-timeline-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-label="Genel Denetim Karnesi">
+      <article class="card">
+        <div class="kpi-label">
+          <span>Genel Düşman Denetim Notu</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-score">.. / 100</div>
+        <div class="kpi-foot" id="kpi-grade">Harf Notu: ..</div>
+      </article>
+
+      <article class="card">
+        <div class="kpi-label">
+          <span>Birikimli Saatlik Tur Sayısı</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-runs">0 Tur</div>
+        <div class="kpi-foot" id="kpi-delta">Son değişim: ..</div>
+      </article>
+
+      <article class="card">
+        <div class="kpi-label">
+          <span>Yakalanan Eksik ve Hata</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-defects">0</div>
+        <div class="kpi-foot" id="kpi-checks">Toplam senaryo: ..</div>
+      </article>
+
+      <article class="card">
+        <div class="kpi-label">
+          <span>WhatsApp Bot Jüri Puanı</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="kpi-value" id="kpi-wa">.. / 100</div>
+        <div class="kpi-foot" id="kpi-wa-sub">34 soruluk çok dilli sınav</div>
+      </article>
+    </section>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <span>6 Alt Sistem Düşman Puanlama Matrisi</span>
+      </h2>
+    </div>
+    <section class="domain-grid" id="domain-grid"></section>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <span>Düşman Gözüyle Yakalanan Eksikler, İş Mantığı Açıkları ve Çözüm Reçeteleri</span>
+      </h2>
+      <div class="filter-bar">
+        <button type="button" class="chip active" data-filter="ALL">Tümü</button>
+        <button type="button" class="chip" data-filter="FAIL">Eksik Bulunanlar</button>
+        <button type="button" class="chip" data-filter="PASS">Tam Geçenler</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Durum</th>
+            <th>Persona / Alan</th>
+            <th>Test ve Eksik Başlığı</th>
+            <th>Kanıt ve Dosya Konumu</th>
+            <th>Çözüm Reçetesi</th>
+          </tr>
+        </thead>
+        <tbody id="checks-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>WhatsApp Bot Jüri Oylaması: 34 Gerçek ve Tuzak Müşteri Sorusu Karnesi</span>
+      </h2>
+      <div class="filter-bar">
+        <button type="button" class="chip active" data-wafilter="ALL">Tümü (34)</button>
+        <button type="button" class="chip" data-wafilter="WEAK">Puan Kırılanlar</button>
+        <button type="button" class="chip" data-wafilter="PERFECT">Tam Puan (10/10)</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kod</th>
+            <th>Kategori ve Persona</th>
+            <th>Müşteri / Düşman Sorusu</th>
+            <th>WhatsApp Botun Yanıtı ve Katmanı</th>
+            <th>Jüri Puanı</th>
+            <th>Jüri Eleştirisi</th>
+          </tr>
+        </thead>
+        <tbody id="wa-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <span>GitHub Açık Kaynak Repo Radarı ve DentaCore Mimari Entegrasyon Önerileri</span>
+      </h2>
+    </div>
+    <section class="repo-grid" id="repo-grid"></section>
+
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Birikimli Saatlik Not Geçmişi (Ekleye Ekleye İlerleyen Defter Özeti)</span>
+      </h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tur #</th>
+            <th>Tur Kodu</th>
+            <th>Tarih ve Saat</th>
+            <th>Genel Not</th>
+            <th>Harf Notu</th>
+            <th>Değişim</th>
+            <th>İş Mantığı</th>
+            <th>WhatsApp Jüri</th>
+            <th>Yakalanan Eksik</th>
+          </tr>
+        </thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="veri/dashboard_data.js"></script>
+  <script>
+    (function () {
+      let currentFilter = 'ALL';
+      let currentWaFilter = 'ALL';
+
+      function esc(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function renderDashboard(data) {
+        if (!data || !data.latest_run) return;
+        const run = data.latest_run;
+        const hist = data.history || [];
+
+        document.getElementById('kpi-score').textContent = run.overall_score + ' / 100';
+        document.getElementById('kpi-grade').textContent = 'Harf Notu: ' + run.grade_letter + ' (' + run.grade_verdict + ')';
+
+        // TOP-OF-PAGE Timestamp + Errors/Missing/Findings Live Feed (Newest First)
+        const topTsEl = document.getElementById('top-last-ts');
+        if (topTsEl) topTsEl.textContent = 'Son Koşu: ' + run.timestamp + ' (Tur #' + run.run_number + ')';
+        const topSumEl = document.getElementById('top-latest-summary');
+        const defectsNow = run.defects || [];
+        if (topSumEl) {
+          topSumEl.className = 'top-alert-strip ' + (defectsNow.length === 0 ? 'is-clean' : 'has-issues');
+          const listHtml = defectsNow.length > 0
+            ? '<ul class="top-defect-list">' + defectsNow.map(function (d) {
+                return '<li><span class="badge badge-fail">' + esc(d.code) + ' · ' + esc(d.severity) + '</span> <strong>' + esc(d.title) + '</strong> <small>(' + esc(d.file_ref || d.domain) + ')</small></li>';
+              }).join('') + '</ul>'
+            : '<div><strong>0 Hata · 0 Eksik · 0 Bulgu:</strong> Tüm 700+ sürü kullanıcı, 52 diş Odontogram, OWASP, FAZ 1-5 ve WhatsApp Jüri kontrolleri temiz geçti.</div>';
+          topSumEl.innerHTML =
+            '<div class="top-alert-meta">' +
+              '<strong>Saat: ' + esc(run.timestamp) + ' | Tur #' + esc(run.run_number) + ' | Puan: ' + esc(run.overall_score) + '/100 (' + esc(run.grade_letter) + ')</strong>' +
+              '<span>Bulgu / Eksik: <strong>' + esc(defectsNow.length) + '</strong> · Geçen Kontrol: <strong>' + esc(run.passed_checks) + '/' + esc(run.total_checks) + '</strong></span>' +
+            '</div>' + listHtml;
+        }
+        const topTb = document.getElementById('top-timeline-tbody');
+        if (topTb) {
+          topTb.innerHTML = hist.slice().reverse().map(function (h, idx) {
+            const titles = (h.defect_titles && h.defect_titles.length)
+              ? h.defect_titles.join(' | ')
+              : (h.defects_found === 0 ? 'Temiz (0 Hata, 0 Eksik)' : (h.defects_found + ' bulgu kaydedildi'));
+            return (
+              '<tr>' +
+                '<td><span class="code-tag">' + esc(h.timestamp) + '</span>' + (idx === 0 ? ' <span class="badge badge-pass">En Yeni</span>' : '') + '</td>' +
+                '<td><strong>Tur #' + esc(h.run_number) + '</strong></td>' +
+                '<td><strong>' + esc(h.overall_score) + ' / 100</strong> (' + esc(h.grade_letter) + ')</td>' +
+                '<td><span class="badge ' + (h.defects_found === 0 ? 'badge-pass' : 'badge-fail') + '">' + esc(h.defects_found) + ' bulgu</span></td>' +
+                '<td>' + esc(titles) + '</td>' +
+              '</tr>'
+            );
+          }).join('');
+        }
+        document.getElementById('kpi-runs').textContent = hist.length + ' Saatlik Tur';
+        document.getElementById('kpi-delta').textContent = 'Önceki tura göre: ' + run.delta_from_previous + ' | Son: ' + run.timestamp;
+        document.getElementById('kpi-defects').textContent = run.defects_found + ' Eksik / Kusur';
+        document.getElementById('kpi-checks').textContent = run.total_checks + ' derin kontrol (' + run.passed_checks + ' tam geçti)';
+        document.getElementById('kpi-wa').textContent = run.whatsapp_jury.overall_score_100 + ' / 100';
+        document.getElementById('kpi-wa-sub').textContent = run.whatsapp_jury.passed_questions + ' / ' + run.whatsapp_jury.total_questions + ' soru tam puan aldı';
+
+        const domains = [
+          { key: 'musteri_yolculugu', label: '1. Gerçek Müşteri ve Hasta Yolculuğu', desc: 'Lead, hasta kaydı, KVKK anamnez, bekleme listesi, post-op' },
+          { key: 'eszamanlilik_race', label: '2. Eşzamanlılık ve Yarış (Race)', desc: '10 paralel randevu, hekim çakışması, 8 paralel stok düşümü' },
+          { key: 'red_team_guvenlik', label: '3. Red-Team Siber Güvenlik', desc: 'Şubeler arası IDOR, RBAC, CSRF, SQLi, Rate-Limit, Backup Path' },
+          { key: 'dusman_is_mantigi', label: '4. Düşman İş Mantığı ve Kod Eksikleri', desc: 'Pazar 03:30 randevu, arşivli hasta, Odontogram DB, WA Webhook' },
+          { key: 'whatsapp_bot_juri', label: '5. WhatsApp Bot Jüri Oylaması', desc: '34 gerçek, tuzak, yazım hatalı ve çok turlu müşteri sorusu' },
+          { key: 'cok_dilli_ve_hafiza', label: '6. 16 Dil, Typo ve Çok Turlu Hafıza', desc: 'faq.json 16 dil boşlukları, birleşik soru ve bağlam hafızası' }
+        ];
+
+        const dGrid = document.getElementById('domain-grid');
+        dGrid.innerHTML = domains.map(function (d) {
+          const val = run.domain_scores[d.key] || 0;
+          const scale = Math.min(1, Math.max(0, val / 100));
+          return (
+            '<article class="card">' +
+              '<div class="kpi-label"><span>' + esc(d.label) + '</span><strong>' + val + ' / 100</strong></div>' +
+              '<div class="kpi-foot">' + esc(d.desc) + '</div>' +
+              '<div class="bar-track"><div class="bar-fill" style="transform:scaleX(' + scale + ')"></div></div>' +
+            '</article>'
+          );
+        }).join('');
+
+        const checks = (run.all_checks || []).filter(function (c) {
+          if (currentFilter === 'FAIL') return c.status !== 'PASS';
+          if (currentFilter === 'PASS') return c.status === 'PASS';
+          return true;
+        });
+
+        document.getElementById('checks-tbody').innerHTML = checks.map(function (c) {
+          const bClass = c.status === 'PASS' ? 'badge-pass' : (c.status === 'PARTIAL' ? 'badge-warn' : 'badge-fail');
+          const bLabel = c.status === 'PASS' ? 'GEÇTİ (' + c.score_10 + '/10)' : 'EKSİK (' + c.score_10 + '/10)';
+          return (
+            '<tr>' +
+              '<td><span class="code-tag">' + esc(c.code) + '</span></td>' +
+              '<td><span class="badge ' + bClass + '">' + esc(bLabel) + '</span></td>' +
+              '<td><strong>' + esc(c.persona) + '</strong><br><small style="color:var(--text-muted)">' + esc(c.domain) + '</small></td>' +
+              '<td><strong>' + esc(c.title) + '</strong></td>' +
+              '<td>' + esc(c.evidence) + (c.file_ref ? '<br><span class="code-tag" style="margin-top:8px">' + esc(c.file_ref) + '</span>' : '') + '</td>' +
+              '<td>' + esc(c.remediation || 'Mevcut koruma standartlara uygun.') + '</td>' +
+            '</tr>'
+          );
+        }).join('');
+
+        const waList = (run.whatsapp_jury.transcripts || []).filter(function (w) {
+          if (currentWaFilter === 'WEAK') return w.score_10 < 10;
+          if (currentWaFilter === 'PERFECT') return w.score_10 >= 10;
+          return true;
+        });
+
+        document.getElementById('wa-tbody').innerHTML = waList.map(function (w) {
+          const bClass = w.score_10 >= 8 ? 'badge-pass' : (w.score_10 >= 5 ? 'badge-warn' : 'badge-fail');
+          return (
+            '<tr>' +
+              '<td><span class="code-tag">' + esc(w.id) + '</span></td>' +
+              '<td><strong>' + esc(w.category) + '</strong><br><small style="color:var(--text-muted)">' + esc(w.persona) + ' (' + esc(w.lang_expected) + ')</small></td>' +
+              '<td>' + (w.context_previous_turn ? '<small style="color:var(--accent-amber)">[Önceki: ' + esc(w.context_previous_turn) + ']</small><br>' : '') + esc(w.question) + '</td>' +
+              '<td>' + esc(w.answer) + '<br><span class="code-tag" style="margin-top:4px">' + esc(w.layer) + ' · ' + esc(w.intent) + ' · dil:' + esc(w.lang_detected) + '</span></td>' +
+              '<td><span class="badge ' + bClass + '">' + w.score_10 + ' / 10</span></td>' +
+              '<td>' + esc((w.critiques || []).join(' | ')) + '</td>' +
+            '</tr>'
+          );
+        }).join('');
+
+        const repos = (run.github_radar && run.github_radar.architectural_recommendations) || [];
+        const liveRepos = (run.github_radar && run.github_radar.live_discovered_repos) || [];
+        let repoHtml = repos.map(function (r) {
+          return (
+            '<article class="card">' +
+              '<div class="repo-title">' +
+                '<a class="repo-link" href="' + esc(r.html_url) + '" target="_blank" rel="noopener">' + esc(r.full_name) + '</a>' +
+                '<span class="badge badge-pass">' + esc(r.stars) + ' ★ · ' + esc(r.language) + '</span>' +
+              '</div>' +
+              '<div class="kpi-foot"><strong>Kapatacağı Eksik:</strong> ' + esc(r.gap_title) + '</div>' +
+              '<div style="margin-top:8px"><span class="code-tag">' + esc(r.target_file) + '</span></div>' +
+              '<div class="recipe-box"><strong>DentaCore Uyarlama Reçetesi:</strong><br>' + esc(r.dentacore_recipe) + '</div>' +
+            '</article>'
+          );
+        }).join('');
+
+        if (liveRepos.length > 0) {
+          repoHtml += liveRepos.map(function (lr) {
+            return (
+              '<article class="card">' +
+                '<div class="repo-title">' +
+                  '<a class="repo-link" href="' + esc(lr.html_url) + '" target="_blank" rel="noopener">' + esc(lr.full_name) + '</a>' +
+                  '<span class="badge badge-warn">CANLI GITHUB · ' + esc(lr.stargazers_count) + ' ★</span>' +
+                '</div>' +
+                '<div class="kpi-foot">' + esc(lr.description) + '</div>' +
+                '<div class="recipe-box">Canlı GitHub API sorgusu (<code>' + esc(lr.query_used) + '</code>) ile keşfedilen açık kaynak referans repo.</div>' +
+              '</article>'
+            );
+          }).join('');
+        }
+        document.getElementById('repo-grid').innerHTML = repoHtml;
+
+        document.getElementById('history-tbody').innerHTML = hist.slice().reverse().map(function (h) {
+          return (
+            '<tr>' +
+              '<td><strong>Tur #' + esc(h.run_number) + '</strong></td>' +
+              '<td><span class="code-tag">' + esc(h.run_id) + '</span></td>' +
+              '<td>' + esc(h.timestamp) + '</td>' +
+              '<td><strong>' + esc(h.overall_score) + ' / 100</strong></td>' +
+              '<td><span class="badge badge-warn">' + esc(h.grade_letter) + '</span></td>' +
+              '<td>' + esc(h.delta_from_previous) + '</td>' +
+              '<td>' + esc(h.domain_scores && h.domain_scores.dusman_is_mantigi) + ' / 100</td>' +
+              '<td>' + esc(h.wa_score) + ' / 100 (' + esc(h.wa_passed) + '/' + esc(h.wa_total) + ')</td>' +
+              '<td><span class="badge badge-fail">' + esc(h.defects_found) + ' bulgu</span></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+
+      document.querySelectorAll('[data-filter]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('[data-filter]').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentFilter = btn.getAttribute('data-filter');
+          renderDashboard(window.DENTACORE_SENTINEL_DATA);
+        });
+      });
+
+      document.querySelectorAll('[data-wafilter]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('[data-wafilter]').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentWaFilter = btn.getAttribute('data-wafilter');
+          renderDashboard(window.DENTACORE_SENTINEL_DATA);
+        });
+      });
+
+      const runBtn = document.getElementById('run-now-btn');
+      runBtn.addEventListener('click', function () {
+        runBtn.disabled = true;
+        runBtn.querySelector('span').textContent = 'Simülasyon Çalışıyor...';
+        fetch('http://127.0.0.1:8795/api/run-now', { method: 'POST' })
+          .then(function (r) { return r.json(); })
+          .then(function () { window.location.reload(); })
+          .catch(function () {
+            alert('Canlı tetikleme için 02_SAATLIK_OTONOM_DAEMON_BASLAT.bat veya 01_HEMEN_SIMULE_ET_VE_NOTLA.bat dosyasını çalıştırabilirsiniz.');
+            runBtn.disabled = false;
+            runBtn.querySelector('span').textContent = 'Simülasyonu Başlat';
+          });
+      });
+
+      function updateCountdown() {
+        const now = new Date();
+        const remMin = 59 - now.getMinutes();
+        const remSec = 59 - now.getSeconds();
+        const mm = String(remMin).padStart(2, '0');
+        const ss = String(remSec).padStart(2, '0');
+        document.getElementById('next-run-label').textContent = 'Sonraki Tur: ' + mm + ':' + ss;
+      }
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+
+      renderDashboard(window.DENTACORE_SENTINEL_DATA);
+    })();
+  </script>
+</body>
+</html>

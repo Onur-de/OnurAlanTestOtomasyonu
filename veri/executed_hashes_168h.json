@@ -1,0 +1,41 @@
+{
+  "week_epoch": 1,
+  "hours_completed": [
+    1,
+    2
+  ],
+  "seen_hashes": [
+    "39c02bfe3938366e",
+    "44faf2b3c6b0d7f7",
+    "70e657a12f0071ac",
+    "85c3f17b7f2b511d",
+    "9643fd08d7033675",
+    "b87716bae629f475",
+    "c67a78cf9ebadb24",
+    "f516c88bf7b5e62b"
+  ],
+  "method_history": [
+    {
+      "run_number": 1,
+      "slot_168": 1,
+      "day": 1,
+      "hour_of_day": 1,
+      "primary_method": "METHOD_PLAYWRIGHT_MONKEY_VIEWPORT",
+      "submethod_primary": "SUB-01",
+      "submethod_secondary": "SUB-06",
+      "fingerprint": "5b8b081775fb3706",
+      "ts": "2026-11-20 03:47:36"
+    },
+    {
+      "run_number": 2,
+      "slot_168": 2,
+      "day": 1,
+      "hour_of_day": 2,
+      "primary_method": "METHOD_PLAYWRIGHT_MONKEY_VIEWPORT",
+      "submethod_primary": "SUB-02",
+      "submethod_secondary": "SUB-07",
+      "fingerprint": "5b65da84bc37eb1e",
+      "ts": "2026-11-20 04:00:33"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+# Python & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Secrets & Sensitive Files
+.env
+.env.*
+.local_secrets.json
+*secret*.json
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Binaries & Local Runtime State
+*.exe
+*.dll
+*.so
+*.dylib
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+.ai-capsule.md
+backups/
+
+# Isolated ephemeral sandbox & daily local LLM cache (never push external project state)
+veri/ephemeral_sandbox/
+veri/llm_redteam_cache.json
+_site/
+_dry_run_only/

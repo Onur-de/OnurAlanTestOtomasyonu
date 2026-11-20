@@ -1,0 +1,182 @@
+name: OnurAlanTestOtomasyonu - 7/24 Bulut Test ve Canlı Komuta Merkezi
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "veri/cloud_enterprise_history.jsonl"
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      run_owasp_zap:
+        description: "Ağır Docker OWASP ZAP Baseline taramasını dahil et"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  deployments: read
+  actions: read
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  test-and-deploy:
+    name: 12 Kapılı Bulut Testi ve Canlı Panel Yayını
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
+
+    steps:
+      - name: Depoyu indir
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Hızlı paralel araç hazırlığı (PostgreSQL 17, Gitleaks, k6)
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker pull -q postgres:17-alpine &
+          PID_PG=$!
+          docker pull -q ghcr.io/gitleaks/gitleaks:v8.30.1 &
+          PID_GL=$!
+          curl -fsSL "https://github.com/grafana/k6/releases/download/v2.4.0/k6-v2.4.0-linux-amd64.tar.gz" -o /tmp/k6.tgz &
+          PID_K6=$!
+          if [[ "${{ inputs.run_owasp_zap == true }}" == "true" || "${{ github.event.schedule }}" == "0 3 * * *" ]]; then
+            docker pull -q ghcr.io/zaproxy/zaproxy:stable &
+            PID_ZAP=$!
+          else
+            PID_ZAP=""
+          fi
+          wait "$PID_PG"
+          wait "$PID_GL"
+          wait "$PID_K6"
+          if [ -n "$PID_ZAP" ]; then
+            wait "$PID_ZAP"
+          fi
+          tar -xzf /tmp/k6.tgz -C /tmp
+          sudo install -m 0755 /tmp/k6-v2.4.0-linux-amd64/k6 /usr/local/bin/k6
+          k6 version
+
+      - name: Python 3.12 kurulumu (pip önbellekli)
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "requirements-ci.txt"
+
+      - name: Bağımlılıkları kur ve tarayıcıyı doğrula
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip --quiet
+          python -m pip install -r requirements-ci.txt --quiet
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "Sistem Google Chrome hazır: $(google-chrome --version)"
+          else
+            python -m playwright install chromium --with-deps
+          fi
+
+      - name: 12 Kapılı Bulut Test Otomasyonunu Çalıştır
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXTRA_ARGS=""
+          if [[ "${{ inputs.run_owasp_zap == true }}" == "true" || "${{ github.event.schedule }}" == "0 3 * * *" ]]; then
+            EXTRA_ARGS="--with-zap"
+          fi
+          python -X utf8 motor/adversarial_engine.py --ci-fast $EXTRA_ARGS
+
+      - name: Canlı GitHub Pages paketini hazırla (_site)
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site/veri
+          cp index.html _site/index.html
+          cp BIRLESIK_KOMUTA_MERKEZI.html _site/BIRLESIK_KOMUTA_MERKEZI.html
+          [ -f canli_denetim_paneli.html ] && cp canli_denetim_paneli.html _site/canli_denetim_paneli.html || true
+          [ -f BU_KLASOR_NE_ISE_YARAR.html ] && cp BU_KLASOR_NE_ISE_YARAR.html _site/BU_KLASOR_NE_ISE_YARAR.html || true
+          [ -f SAATLIK_NOT_VE_EKSIK_DEFTERI.md ] && cp SAATLIK_NOT_VE_EKSIK_DEFTERI.md _site/SAATLIK_NOT_VE_EKSIK_DEFTERI.md || true
+          [ -f veri/unified_data.js ] && cp veri/unified_data.js _site/veri/unified_data.js || true
+          [ -f veri/dashboard_data.js ] && cp veri/dashboard_data.js _site/veri/dashboard_data.js || true
+          touch _site/.nojekyll
+
+      - name: GitHub Pages yapılandır
+        uses: actions/configure-pages@v6
+
+      - name: Pages paketini yükle
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: "_site"
+
+      - name: Pre-deploy Pages Lock Guard
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/deployments/${GITHUB_SHA}"
+          for i in 1 2 3 4; do
+            CODE=$(curl -s -o /tmp/pg_dep.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" "$API" || echo "000")
+            if [ "$CODE" != "200" ]; then
+              break
+            fi
+            ST=$(python3 -c "import json; d=json.load(open('/tmp/pg_dep.json')); print(d.get('status',''))" 2>/dev/null || echo "")
+            if [[ "$ST" == "queued" || "$ST" == "in_progress" || "$ST" == "building" ]]; then
+              echo "Açık Pages dağıtımı bekleniyor ($i/4): $ST"
+              sleep 5
+              if [ "$i" == "4" ]; then
+                curl -s -X POST -H "Authorization: Bearer ${GH_TOKEN}" \
+                  -H "Accept: application/vnd.github+json" "${API}/cancel" || true
+              fi
+            else
+              break
+            fi
+          done
+
+      - name: GitHub Pages canlı yayını
+        id: deployment
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
+
+      - name: Recover Stuck Pages Lock Before Retry
+        if: steps.deployment.outcome == 'failure'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/pages/deployments/${GITHUB_SHA}"
+          curl -s -X POST -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" "${API}/cancel" || true
+          sleep 8
+
+      - name: GitHub Pages yedek yayını
+        id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v5
+
+      - name: Bulut saatlik test geçmişini kaydet (sıfır çakışma)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain veri/cloud_enterprise_history.jsonl)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add veri/cloud_enterprise_history.jsonl
+            git commit -m "chore(ci-hourly): saatlik bulut test sonucu [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push origin HEAD:main
+          fi

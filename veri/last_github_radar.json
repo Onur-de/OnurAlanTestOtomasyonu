@@ -1,0 +1,248 @@
+{
+  "api_status": "LIVE_GITHUB_API",
+  "live_query": "PayloadsAllTheThings OR owasp api security fuzzing python",
+  "live_hits": [
+    {
+      "full_name": "cirosantilli/china-dictatorship",
+      "html_url": "https://github.com/cirosantilli/china-dictatorship",
+      "stargazers_count": 3355,
+      "language": "HTML",
+      "description": "反中共政治宣传库。Anti Chinese government propaganda. 住在中国真名用户的网友请别给星星，不然你要被警察请喝茶。常见问答集，新闻集和饭店和音乐建议。卐习万岁卐。冠状病毒审查郝海东新疆改造中心六四事件法轮功 996.ICU709大抓捕巴拿马文件邓家贵低端人口西藏骚乱。Friends who live in China and ",
+      "updated_at": "2026-11-19",
+      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+    },
+    {
+      "full_name": "gege-circle/.github",
+      "html_url": "https://github.com/gege-circle/.github",
+      "stargazers_count": 2110,
+      "language": "Multi",
+      "description": "这里是GitHub的草场，也是戈戈圈爱好者的交流地，主要讨论动漫、游戏、科技、人文、生活等所有话题，欢迎各位小伙伴们在此讨论趣事。This is GitHub grassland, and the community place for Gege circle lovers, mainly discusses anime, games, technology",
+      "updated_at": "2026-11-19",
+      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+    },
+    {
+      "full_name": "cirosantilli/china-dictatroship-7",
+      "html_url": "https://github.com/cirosantilli/china-dictatroship-7",
+      "stargazers_count": 388,
+      "language": "HTML",
+      "description": "反中共政治宣传库。Anti Chinese government propaganda. https://github.com/cirosantilli/china-dictatorship 的备份backup. 住在中国真名用户的网友请别给星星，不然你要被警察请喝茶。常见问答集，新闻集和饭店和音乐建议。卐习万岁卐。冠状病毒审查郝海东新疆改造中心六四事件法轮",
+      "updated_at": "2026-11-19",
+      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+    },
+    {
+      "full_name": "zszszszsz/.config",
+      "html_url": "https://github.com/zszszszsz/.config",
+      "stargazers_count": 371,
+      "language": "Shell",
+      "description": "# # Automatically generated file; DO NOT EDIT. # OpenWrt Configuration # CONFIG_MODULES=y CONFIG_HAVE_DOT_CONFIG=y # CONFIG_TARGET_sunxi is not set # CONFIG_TARGET_apm821xx is not ",
+      "updated_at": "2026-11-19",
+      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+    }
+  ],
+  "recommendations": [
+    {
+      "gap_id": "GAP-WA-NLP",
+      "gap_title": "WhatsApp Bot Bulanık Eşleşme (Typo/STT) & Çok Turlu Diyalog Hafızası",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py & faq.json",
+      "full_name": "rapidfuzz/RapidFuzz",
+      "html_url": "https://github.com/rapidfuzz/RapidFuzz",
+      "stars": 3150,
+      "language": "C++ / Python",
+      "description": "Rapid fuzzy string matching in Python using various string metrics (Levenshtein, Jaro-Winkler, token_set_ratio).",
+      "dentacore_recipe": "`router.py` içindeki `TokenRouter.route()` fonksiyonunda `L1-acil` ve `L1-sss` regex taraması başarısız olduğunda `rapidfuzz.fuzz.token_set_ratio(n, keyword) >= 82` kontrolü ekleyin. Böylece müşteri 'inpilant fyatı nekadr' veya 'kanma durmuyo yuzm sisti' yazdığında 0 LLM tokenı ile L1 katmanında anında yakalanır.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-WA-NLP",
+      "gap_title": "WhatsApp Bot Bulanık Eşleşme (Typo/STT) & Çok Turlu Diyalog Hafızası",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py & faq.json",
+      "full_name": "pytransitions/transitions",
+      "html_url": "https://github.com/pytransitions/transitions",
+      "stars": 6100,
+      "language": "Python",
+      "description": "A lightweight, object-oriented finite state machine implementation in Python with async support.",
+      "dentacore_recipe": "`router.py` şu an tamamen durumsuz (stateless) çalışıyor. Her `patient_id` için son 3 mesajın niyetini ve durumunu (`IDLE -> ASKED_TREATMENT -> OFFERED_APPT -> AWAITING_SLOT`) Redis/SQLite üzerinde `transitions` durum makinesiyle tutun. Müşteri 'Olur yarın 15:00 uygun mu?' dediğinde önceki mesajın randevu teklifi olduğunu anlayıp doğrudan randevu akışına bağlayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-WA-NLP",
+      "gap_title": "WhatsApp Bot Bulanık Eşleşme (Typo/STT) & Çok Turlu Diyalog Hafızası",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py & faq.json",
+      "full_name": "emcie-co/parlant",
+      "html_url": "https://github.com/emcie-co/parlant",
+      "stars": 18335,
+      "language": "Python",
+      "description": "Customer-facing conversational AI agents built for control: Guideline-driven utterance composition, empathy framing, zero hallucination.",
+      "dentacore_recipe": "`router.py` içindeki `_compose_parlant_concierge_reply()` ile statik şablonları 4-katmanlı VIP Hasta Koordinatörü mimarisine (1. Samimi & Resmi Karşılama, 2. Hastanın Sorduğu Tedavi/Çocuk Yaşı/Ülke/Nakit İsteğini Yansıtma, 3. Kliniğe Özel `ai_custom_rules_json` Politika Enjeksiyonu, 4. Değer Hissettiren Nazik Randevu Daveti) dönüştürün.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-WA-NLP",
+      "gap_title": "WhatsApp Bot Bulanık Eşleşme (Typo/STT) & Çok Turlu Diyalog Hafızası",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py & faq.json",
+      "full_name": "chatwoot/chatwoot",
+      "html_url": "https://github.com/chatwoot/chatwoot",
+      "stars": 40115,
+      "language": "Ruby / TypeScript",
+      "description": "Open-source omnichannel customer engagement suite and Captain AI conversational concierge for WhatsApp and Instagram.",
+      "dentacore_recipe": "WhatsApp ve Instagram DM kanallarında resmi-samimi hasta koordinatörü ses tonu, şikayet ve ağrı bildirimlerinde empatik yatıştırma ve başhekimlik/uzman hekim devri (`handoff=True`) akışını işletin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-WA-NLP",
+      "gap_title": "WhatsApp Bot Bulanık Eşleşme (Typo/STT) & Çok Turlu Diyalog Hafızası",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/router.py & faq.json",
+      "full_name": "RasaHQ/rasa",
+      "html_url": "https://github.com/RasaHQ/rasa",
+      "stars": 21395,
+      "language": "Python",
+      "description": "CALM (Conversational AI with Language Models): Dialogue act composition, entity slot carryover, and contextual repair.",
+      "dentacore_recipe": "Müşteri mesajında zaten verdiği varlıkları (`5 yaşındaki oğlum`, `Almanya'dan geleceğim`, `Allianz sigorta`, `tek diş implant`) slot olarak yakalayıp asla aynı soruyu tekrar sormadan doğrudan o varlığa özel yanıt üretin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-DENTAL-ODONTOGRAM",
+      "gap_title": "FDI Diş Şeması (Odontogram) Yüzey Bazlı (M/D/O/B/L) Backend Kalıcılığı & FHIR Uyumu",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/run_local.py & api/app/panel.py",
+      "full_name": "OpenDental/opendental",
+      "html_url": "https://github.com/OpenDental/opendental",
+      "stars": 620,
+      "language": "C#",
+      "description": "Open Dental Practice Management Software architecture reference for tooth charting, surfaces (M,O,D,B,L), and procedure logs.",
+      "dentacore_recipe": "`run_local.py` ve `002_platform.sql` içine `tooth_records (id, clinic_id, patient_id, tooth_fdi INT CHECK(tooth_fdi BETWEEN 11 AND 85), surface TEXT, procedure_code TEXT, status TEXT, doctor_id INT, note TEXT, created_at TEXT)` tablosu ve `GET/POST /app/api/patients/{pid}/odontogram` uç noktası ekleyin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-DENTAL-ODONTOGRAM",
+      "gap_title": "FDI Diş Şeması (Odontogram) Yüzey Bazlı (M/D/O/B/L) Backend Kalıcılığı & FHIR Uyumu",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/run_local.py & api/app/panel.py",
+      "full_name": "CampbellSoftware/open-odontogram",
+      "html_url": "https://github.com/AlexCorvis84/odontograma",
+      "stars": 190,
+      "language": "JavaScript",
+      "description": "Interactive SVG/Canvas FDI dental odontogram chart with 5-surface tooth selection and clinical status states.",
+      "dentacore_recipe": "`api/app/web/app.js` içindeki statik diş şemasını 5 yüzeyli (Mesial, Distal, Occlusal, Buccal, Lingual) SVG seçiciye dönüştürüp her tıklamayı `POST /app/api/patients/{pid}/odontogram` uç noktasına ve `charges` (kasa hizmet) tablosuna otomatik bağlayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-SCHEDULING-RULES",
+      "gap_title": "Çalışma Saatleri, Pazar Kapalılığı ve Hekim Vardiya Kural Motoru",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/run_local.py (create_appt & update_appt)",
+      "full_name": "calcom/cal.com",
+      "html_url": "https://github.com/calcom/cal.com",
+      "stars": 34200,
+      "language": "TypeScript",
+      "description": "Scheduling infrastructure for everyone: working hours, buffer times, holiday blocks, and multi-resource conflict detection.",
+      "dentacore_recipe": "`run_local.py` satır 1099 `create_appt()` şu an Pazar günü ve gece 03:30 randevularını kabul ediyor (`HTTP 200`). `clinics` tablosuna `working_hours_json` (`{\"mon_fri\":[\"09:00\",\"19:00\"],\"sat\":[\"09:00\",\"15:00\"],\"sun\":null}`) ve işlem arası `buffer_min` (sterilizasyon payı) ekleyip mesai dışı randevuları `HTTP 422` ile reddedin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-API-CHAOS-SECURITY",
+      "gap_title": "Otomatik OpenAPI Fuzzing, Hız Sınırlama (Rate-Limit) ve İdempotency Koruması",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/security.py & panel.py",
+      "full_name": "schemathesis/schemathesis",
+      "html_url": "https://github.com/schemathesis/schemathesis",
+      "stars": 2650,
+      "language": "Python",
+      "description": "Property-based automated API testing for OpenAPI and GraphQL specs powered by Hypothesis.",
+      "dentacore_recipe": "DentaCore test modunda (`DC_ENABLE_OPENAPI=1`) `/openapi.json` şemasını açarak saatlik otomasyona `schemathesis run` adımını bağlayın; tüm Pydantic sınır değerlerini (NaN, negatif kuruş, Unicode taşması) otomatik fuzzing ile tarayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-API-CHAOS-SECURITY",
+      "gap_title": "Otomatik OpenAPI Fuzzing, Hız Sınırlama (Rate-Limit) ve İdempotency Koruması",
+      "target_file": "4_SISTEM_MOTORU_DOKUNMA/dentacore/api/app/security.py & panel.py",
+      "full_name": "laurentS/slowapi",
+      "html_url": "https://github.com/laurentS/slowapi",
+      "stars": 1950,
+      "language": "Python",
+      "description": "A rate limiter for Starlette and FastAPI adapted from flask-limiter.",
+      "dentacore_recipe": "`/app/api/conversations/simulate`, `/app/api/charges` ve `/app/api/backup/create` uç noktalarında şu an hız sınırı yok. `_LIMITER.hit(f'sim:{u[\"id\"]}', 30, 60)` ekleyerek LLM token tüketimi saldırılarını ve `charges` tablosuna `idempotency_key` ekleyerek çift tıklama mükerrer borçlandırmalarını engelleyin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "microsoft/playwright",
+      "html_url": "https://github.com/microsoft/playwright",
+      "stars": 100517,
+      "language": "TypeScript / Python",
+      "description": "Real headless browser automation across Desktop & Mobile viewports with DOM, console, overflow, and interactive SVG verification.",
+      "dentacore_recipe": "Her saatlik turda yönetim panelinin tüm sekmelerini, 52 dişlik 5 yüzeyli SVG Odontogramı, Müşteriye Özel Bot Stüdyosunu ve 8 klasördeki tüm HTML araçlarını gerçek tarayıcıda tıklayarak denetleyin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "swisskyrepo/PayloadsAllTheThings",
+      "html_url": "https://github.com/swisskyrepo/PayloadsAllTheThings",
+      "stars": 82762,
+      "language": "Python / Security",
+      "description": "Comprehensive web application security & pentest payloads (SQLi, XSS, SSTI, Path Traversal, CSRF, Header/Origin bypass).",
+      "dentacore_recipe": "Saatlik rotasyonla hasta arama, dosya yolları, tahsilat ve form uç noktalarına poliglot güvenlik vektörleri gönderip sıfır 500 ve tam izolasyon doğrulayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "minimaxir/big-list-of-naughty-strings",
+      "html_url": "https://github.com/minimaxir/big-list-of-naughty-strings",
+      "stars": 47721,
+      "language": "JSON / Fuzzing",
+      "description": "Edge-case strings (null bytes \\x00, Unicode Bidi RTL \\u202e, zero-width spaces \\u200b, emoji bombs, script injections).",
+      "dentacore_recipe": "Tüm SQL parametrelerinde _clean_sql_args() ve normalize() ile null-byte (\\x00) ve Bidi RTL (\\u202e) karakterlerini temizleyerek PostgreSQL ve UI bozulmalarını önleyin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "promptfoo/promptfoo",
+      "html_url": "https://github.com/promptfoo/promptfoo",
+      "stars": 27430,
+      "language": "TypeScript",
+      "description": "LLM & Agent red-teaming, jailbreak, prompt injection, and healthcare guardrail testing suite.",
+      "dentacore_recipe": "Her saat farklı sistem komutu ezme, fiyat garantisi koparma ve KVKK üçüncü kişi veri sızdırma senaryolarıyla WhatsApp botunu sınayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "NVIDIA/garak",
+      "html_url": "https://github.com/NVIDIA/garak",
+      "stars": 10091,
+      "language": "Python",
+      "description": "LLM vulnerability scanner probing for zero-width obfuscation, leetspeak bypass, and medical prescription leakage.",
+      "dentacore_recipe": "A​ugmentin ve augment1n 1000 m.g. gibi görünmez karakterli veya leetspeak ilaç sorgularını normalize() aşamasında yakalayıp L1-tibbi katmanında 0 token ile engelleyin.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "HypothesisWorks/hypothesis",
+      "html_url": "https://github.com/HypothesisWorks/hypothesis",
+      "stars": 9188,
+      "language": "Python",
+      "description": "Property-based testing library generating stateful edge-case inputs to falsify invariants.",
+      "dentacore_recipe": "Her saat farklı anatomik olmayan FDI diş numaralarını (19, 29, 50, 99 -> HTTP 422) ve ters kasa tarih aralıklarını (start > end -> HTTP 422) otomatik üretip sınayın.",
+      "source": "Architectural Blueprint + GitHub"
+    },
+    {
+      "gap_id": "GAP-POLYMORPHIC-TESTING",
+      "gap_title": "Saatlik Çoklu Formasyonlu Gerçek Kullanıcı (Playwright), Hypothesis Fuzzing, Garak AI Red-Team ve Bandit SAST",
+      "target_file": "test otomasyonu/motor/polymorphic_formations.py & adversarial_engine.py",
+      "full_name": "PyCQA/bandit",
+      "html_url": "https://github.com/PyCQA/bandit",
+      "stars": 8395,
+      "language": "Python",
+      "description": "Python AST static security vulnerability scanner (B608 SQL injection, unsafe deserialization, hardcoded secrets).",
+      "dentacore_recipe": "Her saatlik turda api/app/*.py ve run_local.py üzerinde Bandit AST taraması koşarak 0 Yüksek/Orta güvenlik uyarısı garantileyin.",
+      "source": "Architectural Blueprint + GitHub"
+    }
+  ]
+}

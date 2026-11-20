@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DentaCore Adversarial Sentinel v2.0 Saatlik 12 GitHub Formasyonlu Gerçek Kullanıcı ve Güvenlik Test Otomasyonu Rehberi.">
+  <title>Test Otomasyonu : 12 GitHub Formasyonlu Saatlik Denetim Rehberi</title>
+  <style>/* Hallmark · shape: station-sequence · genre: modern-minimal · theme: Wayfind (deal 2/3, seed dentacore-klinik-rehberi-fb5d·aec816b4·2026-11-18·r0) · job: try · draw: dentacore-v62
+ * hero: stage · nav: top-bar · footer: ledger · imagery: none · signature: station-index · wayfind: 4px-grid
+ * axes: light/mono/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: S, tightened spacing to strict 4px scale */
+  :root {
+    --bg-page: #F3F7F6;
+    --bg-surface: #FAFDFC;
+    --bg-subtle: #E6F0EE;
+    --bg-accent-soft: #E0F2FE;
+    --bg-warn-soft: #FEF3C7;
+    --bg-success-soft: #DCFCE7;
+    --bg-code: #0D211F;
+    --text-code: #EEF7F6;
+    --text-main: #0F2926;
+    --text-secondary: #334E4B;
+    --text-muted: #56706D;
+    --primary: #0B5E56;
+    --primary-hover: #084741;
+    --accent: #0891B2;
+    --success: #15803D;
+    --warn: #B45309;
+    --border-color: #CBDAD7;
+    --border-strong: #94B0AB;
+    --shadow-card: 0 8px 20px -4px rgba(15, 41, 38, 0.07);
+    --shadow-hover: 0 12px 28px -4px rgba(15, 41, 38, 0.13);
+    --focus-ring: 0 0 0 4px rgba(8, 145, 178, 0.35);
+    --font-heading: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  p, li, td, th, label, span, div, h1, h2, h3, h4 {
+    max-height: 999999px;
+    overflow-wrap: break-word;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 20px 72px;
+  }
+
+  .hero-banner {
+    background-color: var(--primary);
+    color: var(--bg-surface);
+    padding: 36px 32px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 28px;
+    border: 1px solid var(--primary-hover);
+  }
+
+  h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.65rem, 2.8vw, 2.35rem);
+    line-height: 1.26;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .hero-lead {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--bg-subtle);
+    max-width: 880px;
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.28rem, 2vw, 1.55rem);
+    line-height: 1.3;
+    color: var(--primary);
+    margin-bottom: 16px;
+  }
+
+  .section-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .section-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  th, td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.94rem;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: var(--bg-subtle);
+    color: var(--primary);
+    font-weight: 700;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    background-color: var(--bg-subtle);
+    color: var(--primary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary);
+    color: var(--bg-surface);
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+    font-size: 0.94rem;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.16s ease, background-color 0.16s ease;
+  }
+
+  .btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn:active, button:active {
+    transform: translateY(0);
+  }
+
+  .btn:disabled, button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="hero-banner">
+    <h1>Saatlik Çoklu Formasyonlu Test Merkezi</h1>
+    <p class="hero-lead">Her saat 12 farklı GitHub formasyonuyla tüm klasörleri ve güvenliği sınar.</p>
+  </header>
+
+  <section class="section-card">
+    <h2>1. Bu Klasördeki Dosyalar ve Ne İşe Yaradıkları</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Dosya / Klasör Adı</th>
+            <th>Ne İşe Yarar ve Nasıl Kullanılır?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>01_HEMEN_SIMULE_ET_VE_NOTLA.bat</code></td>
+            <td><strong>Çift tıkla, hemen yeni formasyonla test et:</strong> O an yeni bir GitHub formasyonu seçer, gerçek tarayıcı (Playwright) açıp 16/16 panel modülündeki 39/39 butonu (1.690+ etkileşim + mobil 390x844 çekmece), 52/52 diş modalını (3 tam tur = 156 modal + 260 SVG yüzey), 96/96 HTTP uç noktasını (2FA TOTP, KVKK dışa aktarım/anonimleştirme, stok transferi, takvim rotasyonu, boş saat motoru), 6 aylık (180 gün) veri yaşlandırma ve soğuk disk kalıcılığını, 701 yeni hasta/kişi kaydını, 425+ mesajı, 190+ bildirimi, Bandit SAST güvenliğini ve 64 WhatsApp jüri sorusunu (+ 1.500 saatlik otonom soruyu) test edip puanı deftere ekler.</td>
+          </tr>
+          <tr>
+            <td><code>04_CANLI_DENETIM_PANELI_AC.bat</code> &amp; <code>canli_denetim_paneli.html</code></td>
+            <td>Saatlik turların puanlarını, yakalanan açıkları ve WhatsApp bot jüri karnesini görsel ekranda açar.</td>
+          </tr>
+          <tr>
+            <td><code>SAATLIK_NOT_VE_EKSIK_DEFTERI.md</code></td>
+            <td>Her saat başı yapılan testin notunu, önceki saatleri silmeden alt alta ekleyen (append-only) ana karne defteridir.</td>
+          </tr>
+          <tr>
+            <td><code>motor/weekly_168h_curriculum.py</code> &amp; <code>veri/executed_hashes_168h.json</code></td>
+            <td>7 gün x 24 saat = 168 saatlik Sıfır Tekrarlı Müfredat Motoru: Durumlu Muhasebe Grafı (Hypothesis StateMachine), 5-Turlu Sohbet, 5-Rol RBAC Matrisi, Adli Kriptografi, Mutasyon Testi, 6 Aylık Veri &amp; Disk Kalıcılık Denetçisi, Yüksek Hacimli Sürü Stres Motoru (701 Hasta/Kişi, 425+ Mesaj, 190+ Bildirim, 1.260+ API Çağrısı), 96/96 Tam Uç Nokta Denetçisi (2FA TOTP, KVKK, Stok Transferi, Takvim Rotasyonu) ve SHA-256 Tekrar Engelleme Kasası.</td>
+          </tr>
+          <tr>
+            <td><code>motor/polymorphic_formations.py</code></td>
+            <td>Her saat farklı test üretmesini sağlayan 12 GitHub Formasyon Motoru (Playwright 16/16 modül, 39/39 buton, 1.690+ etkileşim, 52 diş modalı, mobil 390x844 çekmece, Hypothesis, PayloadsAllTheThings, BLNS, Promptfoo, NVIDIA Garak, PyCQA Bandit ve 8 Klasör Denetçisi).</td>
+          </tr>
+          <tr>
+            <td><code>motor/adversarial_engine.py</code> &amp; <code>whatsapp_jury.py</code> &amp; <code>github_radar.py</code></td>
+            <td>Canlı test sunucusunu kaldıran, 64 soruluk (32 çekirdek + 16 saatlik polimorfik + 8 absürt müşteri tuzağı + 8 çok dilli ağır yazım hatası otomatik çeviri) WhatsApp jürisini ve canlı GitHub REST API tarayıcısını çalıştıran çekirdek motor dosyalarıdır.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 20px;">
+      <a class="btn" href="canli_denetim_paneli.html">Canlı Denetim Panelini Aç</a>
+    </div>
+  </section>
+</div>
+</body>
+</html>
