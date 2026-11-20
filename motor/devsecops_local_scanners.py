@@ -12,7 +12,9 @@ Runs strictly defensive security verification against local paths & ephemeral lo
 from __future__ import annotations
 
 import json
+import logging
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -25,14 +27,20 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+LOG = logging.getLogger(__name__)
 TZ = ZoneInfo("Europe/Istanbul")
 
 
+def _docker_bin() -> str | None:
+    return shutil.which("docker")
+
+
 def _docker_has_image(name: str) -> bool:
-    if not shutil.which("docker"):
+    docker_exe = _docker_bin()
+    if not docker_exe:
         return False
-    r = subprocess.run(
-        ["docker", "images", "-q", name],
+    r = subprocess.run(  # noqa: S603
+        [docker_exe, "images", "-q", name],
         capture_output=True,
         text=True,
         timeout=8,
@@ -61,11 +69,12 @@ def run_gitleaks_dir_scan(target_dir: Path, config_path: Path | None = None, tim
 
     tmp_rep = Path(tempfile.mkdtemp(prefix="dc_gl_"))
     if os.name == "posix":
-        os.chmod(tmp_rep, 0o777)  # nosec B103
+        os.chmod(tmp_rep, 0o777)  # nosec B103  # noqa: S103
     try:
-        if has_docker_img:
+        docker_exe = _docker_bin()
+        if has_docker_img and docker_exe:
             cmd = [
-                "docker", "run", "--rm",
+                docker_exe, "run", "--rm",
                 "-v", f"{target_dir.resolve()}:/scan:ro",
                 "-v", f"{tmp_rep.resolve()}:/out:rw",
                 img, "dir", "/scan",
@@ -85,7 +94,7 @@ def run_gitleaks_dir_scan(target_dir: Path, config_path: Path | None = None, tim
             if config_path and config_path.is_file():
                 cmd.extend(["--config", str(config_path)])
             used_engine = "gitleaks-native"
-        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)  # noqa: S603
         rep_file = tmp_rep / "gitleaks.json"
         findings = []
         if rep_file.is_file():
@@ -96,8 +105,8 @@ def run_gitleaks_dir_scan(target_dir: Path, config_path: Path | None = None, tim
                         {"rule": f.get("RuleID"), "file": f.get("File"), "line": f.get("StartLine")}
                         for f in raw
                     ]
-            except Exception:
-                pass
+            except Exception as exc:
+                LOG.debug("gitleaks JSON raporu okunamadı: %s", exc)
         res["findings_count"] = len(findings)
         res["findings"] = findings[:15]
         res["status"] = "PASS" if p.returncode == 0 and len(findings) == 0 else "FAIL"
@@ -153,25 +162,30 @@ def run_openapi_schema_fuzzer(
         {},
         {"__fuzz": "A" * 4096},
         {"name": "", "amount": -999999999, "id": "not-an-int"},
-        {"text": "\u202eRTL\u0000NULL' OR 1=1;--", "count": 2**40},
+        {"text": "\u202eRTL\u0000NULL' OR 1=1;--", "count": 9223372036854775808, "id": 9223372036854775808},
     ]
 
     paths = schema.get("paths") or {}
     with httpx.Client(timeout=6.0, headers=hdrs) as cli:
         for route, ops in paths.items():
-            if any(skip in route for skip in ("/auth/logout", "/sessions/revoke", "/permissions")):
+            if any(skip in route for skip in ("/auth/logout", "/sessions/revoke", "/permissions", "/active")):
                 continue
             concrete_route = route
-            for seg in ("{id}", "{pid}", "{aid}", "{sid}", "{cid}", "{iid}", "{wid}", "{oid}", "{pay_id}"):
+            for seg in ("{id}", "{pid}", "{aid}", "{sid}", "{cid}", "{iid}", "{wid}", "{oid}", "{pay_id}", "{eid}"):
                 concrete_route = concrete_route.replace(seg, "999999")
-            concrete_route = concrete_route.replace("{slug}", "merkez").replace("{clinic_slug}", "merkez").replace("{token}", "invalid-token").replace("{code}", "nonexistent")
-            if "{" in concrete_route:
-                continue
+            concrete_route = (
+                concrete_route.replace("{slug}", "merkez")
+                .replace("{clinic_slug}", "merkez")
+                .replace("{token}", "invalid-token")
+                .replace("{code}", "nonexistent")
+                .replace("{kind}", "charges")
+            )
+            concrete_route = re.sub(r"\{[^}]+\}", "999999", concrete_route)
             for method in ("get", "post", "patch", "delete"):
                 if method not in ops:
                     continue
                 res["routes_fuzzed"] += 1
-                cases = [None] if method == "get" else boundary_payloads[:2]
+                cases = [None] if method == "get" else boundary_payloads
                 for pl in cases:
                     st = 0
                     try:
@@ -185,7 +199,8 @@ def run_openapi_schema_fuzzer(
                         res["http_5xx_errors"].append(f"{method.upper()} {concrete_route} -> HTTP {st}")
 
     # Optional Docker Schemathesis execution (when cached locally)
-    if use_docker_schemathesis and _docker_has_image("schemathesis/schemathesis:stable"):
+    docker_exe = _docker_bin()
+    if use_docker_schemathesis and docker_exe and _docker_has_image("schemathesis/schemathesis:stable"):
         if sys.platform.startswith("linux"):
             docker_url = base_url
             net_args = ["--network=host"]
@@ -193,7 +208,7 @@ def run_openapi_schema_fuzzer(
             docker_url = base_url.replace("127.0.0.1", "host.docker.internal").replace("localhost", "host.docker.internal")
             net_args = ["--add-host=host.docker.internal:host-gateway"]
         cmd = [
-            "docker", "run", "--rm",
+            docker_exe, "run", "--rm",
             *net_args,
             "schemathesis/schemathesis:stable", "run",
             f"{docker_url}/openapi.json",
@@ -204,12 +219,17 @@ def run_openapi_schema_fuzzer(
         for hk, hv in hdrs.items():
             cmd.extend(["--header", f"{hk}: {hv}"])
         try:
-            sp = subprocess.run(cmd, capture_output=True, text=True, timeout=75)
+            sp = subprocess.run(cmd, capture_output=True, text=True, timeout=75)  # noqa: S603
             res["schemathesis_docker_status"] = "PASS" if sp.returncode == 0 else f"FAIL(rc={sp.returncode})"
             if sp.returncode != 0:
                 res["http_5xx_errors"].append(f"Schemathesis Docker rc={sp.returncode}: {(sp.stdout + sp.stderr)[-220:]}")
         except Exception as exc:
             res["schemathesis_docker_status"] = f"ERR({exc})"
+            res["http_5xx_errors"].append(f"Schemathesis Docker EXC: {exc}")
+    elif not use_docker_schemathesis:
+        res["schemathesis_docker_status"] = "OFF(ci_fast)"
+    else:
+        res["schemathesis_docker_status"] = "SKIP(image_missing)"
 
     res["status"] = "PASS" if not res["http_5xx_errors"] else "FAIL"
     res["detail"] = f"routes={res['routes_fuzzed']}, reqs={res['requests_sent']}, 5xx={len(res['http_5xx_errors'])}, schemathesis={res['schemathesis_docker_status']}"
@@ -250,47 +270,53 @@ def run_asvs_and_zap_audit(base_url: str, run_docker_zap: bool = False, timeout:
         res["duration_sec"] = round(time.perf_counter() - t0, 2)
         return res
 
-    if run_docker_zap and _docker_has_image("ghcr.io/zaproxy/zaproxy:stable"):
-        tmp_z = Path(tempfile.mkdtemp(prefix="dc_zap_"))
-        if os.name == "posix":
-            os.chmod(tmp_z, 0o777)  # nosec B103
-        try:
-            if sys.platform.startswith("linux"):
-                docker_url = base_url
-                net_args = ["--network=host"]
-            else:
-                docker_url = base_url.replace("127.0.0.1", "host.docker.internal").replace("localhost", "host.docker.internal")
-                net_args = ["--add-host=host.docker.internal:host-gateway"]
-            zp = subprocess.run(
-                [
-                    "docker", "run", "--rm",
-                    *net_args,
-                    "-v", f"{tmp_z.resolve()}:/zap/wrk:rw",
-                    "ghcr.io/zaproxy/zaproxy:stable",
-                    "zap-baseline.py", "-t", docker_url,
-                    "-m", "1", "-J", "zap.json",
-                ],
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-            )
-            zfile = tmp_z / "zap.json"
-            if zfile.is_file():
-                zj = json.loads(zfile.read_text(encoding="utf-8"))
-                for site in zj.get("site") or []:
-                    for al in site.get("alerts") or []:
-                        rc_risk = str(al.get("riskcode", "0"))
-                        if rc_risk == "3":
-                            res["zap_high"] += 1
-                        elif rc_risk == "2":
-                            res["zap_medium"] += 1
-            res["zap_status"] = "PASS" if (zp.returncode in (0, 2) and res["zap_high"] == 0) else f"FAIL(rc={zp.returncode}, high={res['zap_high']})"
-        except Exception as exc:
-            res["zap_status"] = f"ERR({exc})"
-        finally:
-            shutil.rmtree(tmp_z, ignore_errors=True)
+    docker_exe = _docker_bin()
+    if run_docker_zap:
+        if not docker_exe or not _docker_has_image("ghcr.io/zaproxy/zaproxy:stable"):
+            res["zap_status"] = "FAIL(image_missing)"
+        else:
+            tmp_z = Path(tempfile.mkdtemp(prefix="dc_zap_"))
+            if os.name == "posix":
+                os.chmod(tmp_z, 0o777)  # nosec B103  # noqa: S103
+            try:
+                if sys.platform.startswith("linux"):
+                    docker_url = base_url
+                    net_args = ["--network=host"]
+                else:
+                    docker_url = base_url.replace("127.0.0.1", "host.docker.internal").replace("localhost", "host.docker.internal")
+                    net_args = ["--add-host=host.docker.internal:host-gateway"]
+                zp = subprocess.run(  # noqa: S603
+                    [
+                        docker_exe, "run", "--rm",
+                        *net_args,
+                        "-v", f"{tmp_z.resolve()}:/zap/wrk:rw",
+                        "ghcr.io/zaproxy/zaproxy:stable",
+                        "zap-baseline.py", "-t", docker_url,
+                        "-m", "1", "-J", "zap.json",
+                    ],
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout,
+                )
+                zfile = tmp_z / "zap.json"
+                if zfile.is_file():
+                    zj = json.loads(zfile.read_text(encoding="utf-8"))
+                    for site in zj.get("site") or []:
+                        for al in site.get("alerts") or []:
+                            rc_risk = str(al.get("riskcode", "0"))
+                            if rc_risk == "3":
+                                res["zap_high"] += 1
+                            elif rc_risk == "2":
+                                res["zap_medium"] += 1
+                res["zap_status"] = "PASS" if (zp.returncode in (0, 2) and res["zap_high"] == 0) else f"FAIL(rc={zp.returncode}, high={res['zap_high']})"
+            except Exception as exc:
+                res["zap_status"] = f"ERR({exc})"
+            finally:
+                shutil.rmtree(tmp_z, ignore_errors=True)
+    else:
+        res["zap_status"] = "OFF(ci_fast)"
 
-    zap_ok = res["zap_status"] in ("SKIP", "PASS")
+    zap_ok = (res["zap_status"] == "PASS") if run_docker_zap else (res["zap_status"] in ("OFF(ci_fast)", "PASS"))
     res["status"] = "PASS" if (not res["missing_headers"] and zap_ok) else "FAIL"
     res["detail"] = f"missing_asvs={res['missing_headers']}, zap={res['zap_status']} (high={res['zap_high']}, med={res['zap_medium']})"
     res["duration_sec"] = round(time.perf_counter() - t0, 2)
@@ -303,9 +329,9 @@ def run_sast_ruff_bandit(target_dir: Path, ruff_config: Path | None = None) -> d
     if ruff_config and ruff_config.is_file():
         ruff_cmd = [sys.executable, "-m", "ruff", "check", "--config", str(ruff_config)]
     ruff_cmd.extend(["--exclude", "tests,node_modules,backups,backup,__pycache__,ephemeral_sandbox", str(target_dir)])
-    rp = subprocess.run(ruff_cmd, capture_output=True, text=True, timeout=60)
+    rp = subprocess.run(ruff_cmd, capture_output=True, text=True, timeout=60)  # noqa: S603
 
-    bp = subprocess.run(
+    bp = subprocess.run(  # noqa: S603
         [sys.executable, "-m", "bandit", "-r", str(target_dir), "-x", "tests,ephemeral_sandbox,__pycache__", "-ll", "-ii", "-q", "-f", "json"],
         capture_output=True,
         text=True,
@@ -348,12 +374,14 @@ def run_full_devsecops_local_suite(
         scanners.append(run_asvs_and_zap_audit(base_url, run_docker_zap=run_docker_zap))
 
     failed = [s for s in scanners if s["status"] == "FAIL"]
+    skipped = [s for s in scanners if s["status"] == "SKIP"]
     return {
         "gate": "DEVSECOPS_LOCAL_SCANNERS",
         "timestamp": ts,
-        "status": "PASS" if not failed else "FAIL",
+        "status": "PASS" if (not failed and not skipped) else "FAIL",
         "passed_scanners": sum(1 for s in scanners if s["status"] == "PASS"),
+        "skipped_scanners": [s["scanner"] for s in skipped],
         "total_scanners": len(scanners),
-        "failed_scanners": [f"{s['scanner']}: {s['detail']}" for s in failed],
+        "failed_scanners": [f"{s['scanner']}: {s['detail']}" for s in failed + skipped],
         "scanners": scanners,
     }

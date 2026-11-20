@@ -900,7 +900,15 @@
       });
 
       const runBtn = document.getElementById('run-now-btn');
+      const isLocalHost = ['localhost', '127.0.0.1', ''].includes(location.hostname);
+      if (!isLocalHost) {
+        runBtn.title = 'Yerel Windows makinede canlı daemon ile çalışır';
+      }
       runBtn.addEventListener('click', function () {
+        if (!isLocalHost) {
+          alert('Bu sayfa statik GitHub Pages yayınıdır. Saatlik bulut testi otomatik çalışır; yerel tetikleme için 02_SAATLIK_OTONOM_DAEMON_BASLAT.bat veya 01_HEMEN_SIMULE_ET_VE_NOTLA.bat dosyasını çalıştırabilirsiniz.');
+          return;
+        }
         runBtn.disabled = true;
         runBtn.querySelector('span').textContent = 'Simülasyon Çalışıyor...';
         fetch('http://127.0.0.1:8795/api/run-now', { method: 'POST' })

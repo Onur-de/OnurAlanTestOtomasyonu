@@ -12,12 +12,14 @@ from __future__ import annotations
 
 import html
 import json
+import logging
 import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+LOG = logging.getLogger(__name__)
 TZ = ZoneInfo("Europe/Istanbul")
 HERE = Path(__file__).resolve().parent
 AUTO_ROOT = HERE.parent
@@ -42,8 +44,8 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
         if line.strip():
             try:
                 rows.append(json.loads(line))
-            except Exception:
-                pass
+            except Exception as exc:
+                LOG.debug("JSONL satırı atlandı (%s): %s", path.name, exc)
     return rows
 
 
@@ -135,7 +137,7 @@ def build_unified_control_center(
                 metric_txt = f"{g.get('image', 'pg')} | {g.get('tables_created', 0)} tablo | ACID {g.get('acid_race_commits', 0)}/1"
             elif g_name == "DEVSECOPS_LOCAL_SCANNERS":
                 metric_txt = f"{g.get('passed_scanners', 0)}/{g.get('total_scanners', 0)} tarayıcı geçti"
-            elif g_name == "LIVE_L3_LLM_REDTEAM":
+            elif g_name in ("LIVE_L3_LLM_REDTEAM", "CI_L3_GUARDRAIL_UNIT"):
                 metric_txt = f"{g.get('model', 'LLM')} | {g.get('passed_probes', 0)}/{g.get('total_probes', 0)} kalkan"
             elif g_name == "K6_SOAK_MEMORY":
                 metric_txt = f"{g.get('http_reqs', 0)} istek | p95={g.get('p95_ms', 0)}ms | RAM {g.get('ram_growth_mb', 0):+}MB"
@@ -205,7 +207,7 @@ def build_unified_control_center(
     svg_layers = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>'
 
     timeline_rows = []
-    for idx_e, ev in enumerate(events[:40]):
+    for idx_e, ev in enumerate(events[:12]):
         st = ev["status"]
         b_cls = "badge-pass" if st == "PASS" else ("badge-warn" if st in ("WARN", "SKIP") else "badge-fail")
         newest_tag = ' <span class="badge badge-pass">En Yeni</span>' if idx_e == 0 else ""
@@ -226,13 +228,15 @@ def build_unified_control_center(
 
     gate_cards = []
     gate_meta = [
-        ("DOCKER_POSTGRES", "1. Docker PostgreSQL Kapısı", "Canlı PostgreSQL 17 DDL, ACID kilidi ve tablo paritesi"),
-        ("DEVSECOPS_LOCAL_SCANNERS", "2. Yerel DevSecOps Tarayıcıları", "Docker Gitleaks, Schemathesis OpenAPI Fuzz, OWASP ZAP, Ruff ve Bandit"),
-        ("LIVE_L3_LLM_REDTEAM", "3. Canlı L3 LLM Red-Team", "OmniRoute gerçek LLM üzerinde enjeksiyon, hamile/çocuk doz ve KVKK kalkanı"),
-        ("K6_SOAK_MEMORY", "4. k6 Yük ve Bellek Sızıntısı", "k6 sürekli yük testi ve psutil RAM/Handle artış eğimi denetimi"),
+        ("DOCKER_POSTGRES", "1. Docker PostgreSQL", "PostgreSQL 17 DDL, ACID kilidi ve tablo paritesi"),
+        ("DEVSECOPS_LOCAL_SCANNERS", "2. DevSecOps Tarayıcıları", "Gitleaks, OpenAPI Fuzz, OWASP ZAP, Ruff, Bandit"),
+        ("LIVE_L3_LLM_REDTEAM", "3. L3 LLM Kalkanı", "Enjeksiyon, doz, KVKK ve fiyat kalkan doğrulaması"),
+        ("K6_SOAK_MEMORY", "4. k6 Yük ve Bellek", "k6 yük testi ve psutil RAM/Handle artış takibi"),
     ]
     for g_key, g_title, g_desc in gate_meta:
         gd = latest_gates.get(g_key)
+        if not gd and g_key == "LIVE_L3_LLM_REDTEAM":
+            gd = latest_gates.get("CI_L3_GUARDRAIL_UNIT")
         if gd:
             g_st = str(gd.get("status", "SKIP"))
             g_cls = "badge-pass" if g_st == "PASS" else ("badge-warn" if g_st == "SKIP" else "badge-fail")
@@ -242,7 +246,8 @@ def build_unified_control_center(
             elif g_key == "DEVSECOPS_LOCAL_SCANNERS":
                 g_val = f"{gd.get('passed_scanners', 0)}/{gd.get('total_scanners', 0)} Tarayıcı"
             elif g_key == "LIVE_L3_LLM_REDTEAM":
-                g_val = f"{gd.get('passed_probes', 0)}/{gd.get('total_probes', 0)} Kalkan"
+                mode_lbl = "CI Birim" if gd.get("gate") == "CI_L3_GUARDRAIL_UNIT" else "Canlı LLM"
+                g_val = f"{gd.get('passed_probes', 0)}/{gd.get('total_probes', 0)} ({mode_lbl})"
             else:
                 g_val = f"{gd.get('http_reqs', 0)} İstek | p95 {gd.get('p95_ms', 0)} ms"
         else:
@@ -252,7 +257,7 @@ def build_unified_control_center(
             f'<div class="card-top"><strong>{_esc(g_title)}</strong><span class="badge {g_cls}">{_esc(g_st)}</span></div>'
             f'<div class="card-val">{_esc(g_val)}</div>'
             f'<div class="card-desc">{_esc(g_desc)}</div>'
-            f'<div class="card-foot">Son koşu: <code>{_esc(g_ts)}</code></div>'
+            f'<div class="card-foot">Son: <code>{_esc(g_ts)}</code></div>'
             f'</article>'
         )
 
@@ -405,6 +410,7 @@ code {
   background-color: var(--accent-teal-soft);
   padding: 4px 8px;
   border-radius: var(--r-sm);
+  white-space: nowrap;
 }
 .badge {
   display: inline-flex;
@@ -454,7 +460,7 @@ code {
       <div class="brand-icon">{svg_shield}</div>
       <div>
         <h1>Birleşik Test Komuta Merkezi</h1>
-        <p class="sub">Tüm test motorları ve 5 kurumsal güvenlik kapısı tek ekranda</p>
+        <p class="sub">Saatlik test akışı ve 4 kurumsal güvenlik kapısı</p>
       </div>
     </div>
     <nav class="nav-links" aria-label="Panel bağlantıları">
@@ -463,14 +469,14 @@ code {
     </nav>
   </header>
 
-  <section class="panel panel-top" aria-label="Birleşik Saat ve Bulgu Akışı">
+  <section class="panel panel-top" aria-label="Canlı Akış">
     <div class="panel-head">
-      <h2>{svg_clock}Canlı Saat, Hata, Eksik ve Bulgu Akışı (En Yeni En Üstte)</h2>
+      <h2>{svg_clock}Canlı Saat, Hata ve Bulgu Akışı</h2>
       <span class="badge {"badge-pass" if (total_err + total_find) == 0 else "badge-fail"}">Güncelleme: {_esc(now_str)}</span>
     </div>
     <div class="top-strip">
-      <strong>Son Olay Saati: {_esc(latest_ts)}</strong>
-      <span>Son 10 Kayıt Özeti: <code>Hata: {total_err}</code> <code>Eksik: {total_miss}</code> <code>Bulgu: {total_find}</code></span>
+      <strong>Son Olay: {_esc(latest_ts)}</strong>
+      <span>Son 10 Kayıt: <code>Hata: {total_err}</code> <code>Eksik: {total_miss}</code> <code>Bulgu: {total_find}</code></span>
     </div>
     <div class="table-wrap">
       <table>
@@ -483,7 +489,7 @@ code {
             <th>Eksik</th>
             <th>Bulgu</th>
             <th>Ölçüm</th>
-            <th>Bulgu Özeti</th>
+            <th>Özet</th>
           </tr>
         </thead>
         <tbody>{''.join(timeline_rows)}</tbody>
@@ -491,9 +497,9 @@ code {
     </div>
   </section>
 
-  <section aria-label="5 Kurumsal Otomasyon Kapısı">
+  <section aria-label="4 Kurumsal Güvenlik Kapısı">
     <div class="panel-head">
-      <h2>{svg_layers}Kurumsal Test Kapıları (PostgreSQL, DevSecOps, Canlı L3 LLM, k6 Bellek)</h2>
+      <h2>{svg_layers}4 Kurumsal Güvenlik Kapısı</h2>
     </div>
     <div class="grid-4">
       {''.join(gate_cards)}

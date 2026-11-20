@@ -12,6 +12,7 @@ Module 4: Real `k6` Load/Soak Testing + `psutil` RAM/Memory & Handle Leak Detect
 from __future__ import annotations
 
 import json
+import logging
 import shutil
 import subprocess
 import tempfile
@@ -24,6 +25,7 @@ from zoneinfo import ZoneInfo
 
 import psutil
 
+LOG = logging.getLogger(__name__)
 TZ = ZoneInfo("Europe/Istanbul")
 
 
@@ -131,18 +133,18 @@ export default function () {{
                 try:
                     h_cnt = proc.num_handles() if hasattr(proc, "num_handles") else proc.num_fds()
                     samples_handles.append(int(h_cnt))
-                except Exception:
-                    pass
+                except Exception as exc:
+                    LOG.debug("handle sayısı okunamadı: %s", exc)
                 samples_cpu.append(round(proc.cpu_percent(interval=None), 1))
                 stop_evt.wait(0.8)
-        except Exception:
-            pass
+        except Exception as exc:
+            LOG.debug("psutil örnekleyici durdu: %s", exc)
 
     prof_t = threading.Thread(target=_profile_loop, daemon=True)
     prof_t.start()
 
     try:
-        kp = subprocess.run(
+        kp = subprocess.run(  # noqa: S603
             [k6_exe, "run", "--no-color", "--summary-export", str(summary_file), str(script_file)],
             capture_output=True,
             text=True,
