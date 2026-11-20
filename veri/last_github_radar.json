@@ -1,42 +1,42 @@
 {
   "api_status": "LIVE_GITHUB_API",
-  "live_query": "PayloadsAllTheThings OR owasp api security fuzzing python",
+  "live_query": "big-list-of-naughty-strings OR unicode fuzzing security",
   "live_hits": [
     {
-      "full_name": "cirosantilli/china-dictatorship",
-      "html_url": "https://github.com/cirosantilli/china-dictatorship",
-      "stargazers_count": 3355,
-      "language": "HTML",
-      "description": "反中共政治宣传库。Anti Chinese government propaganda. 住在中国真名用户的网友请别给星星，不然你要被警察请喝茶。常见问答集，新闻集和饭店和音乐建议。卐习万岁卐。冠状病毒审查郝海东新疆改造中心六四事件法轮功 996.ICU709大抓捕巴拿马文件邓家贵低端人口西藏骚乱。Friends who live in China and ",
-      "updated_at": "2026-11-19",
-      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
-    },
-    {
-      "full_name": "gege-circle/.github",
-      "html_url": "https://github.com/gege-circle/.github",
-      "stargazers_count": 2110,
+      "full_name": "Hack-with-Github/Awesome-Hacking",
+      "html_url": "https://github.com/Hack-with-Github/Awesome-Hacking",
+      "stargazers_count": 126014,
       "language": "Multi",
-      "description": "这里是GitHub的草场，也是戈戈圈爱好者的交流地，主要讨论动漫、游戏、科技、人文、生活等所有话题，欢迎各位小伙伴们在此讨论趣事。This is GitHub grassland, and the community place for Gege circle lovers, mainly discusses anime, games, technology",
-      "updated_at": "2026-11-19",
-      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+      "description": "A collection of various awesome lists for hackers, pentesters and security researchers",
+      "updated_at": "2026-11-20",
+      "query_used": "big-list-of-naughty-strings OR unicode fuzzing security"
     },
     {
-      "full_name": "cirosantilli/china-dictatroship-7",
-      "html_url": "https://github.com/cirosantilli/china-dictatroship-7",
-      "stargazers_count": 388,
-      "language": "HTML",
-      "description": "反中共政治宣传库。Anti Chinese government propaganda. https://github.com/cirosantilli/china-dictatorship 的备份backup. 住在中国真名用户的网友请别给星星，不然你要被警察请喝茶。常见问答集，新闻集和饭店和音乐建议。卐习万岁卐。冠状病毒审查郝海东新疆改造中心六四事件法轮",
-      "updated_at": "2026-11-19",
-      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+      "full_name": "danielmiessler/SecLists",
+      "html_url": "https://github.com/danielmiessler/SecLists",
+      "stargazers_count": 74847,
+      "language": "PHP",
+      "description": "SecLists is the security tester's companion. It's a collection of multiple types of lists used during security assessments, collected in one place. List types include usernames, pa",
+      "updated_at": "2026-11-20",
+      "query_used": "big-list-of-naughty-strings OR unicode fuzzing security"
     },
     {
-      "full_name": "zszszszsz/.config",
-      "html_url": "https://github.com/zszszszsz/.config",
-      "stargazers_count": 371,
+      "full_name": "maurosoria/dirsearch",
+      "html_url": "https://github.com/maurosoria/dirsearch",
+      "stargazers_count": 15099,
+      "language": "Python",
+      "description": "Web path scanner",
+      "updated_at": "2026-11-19",
+      "query_used": "big-list-of-naughty-strings OR unicode fuzzing security"
+    },
+    {
+      "full_name": "google/oss-fuzz",
+      "html_url": "https://github.com/google/oss-fuzz",
+      "stargazers_count": 12973,
       "language": "Shell",
-      "description": "# # Automatically generated file; DO NOT EDIT. # OpenWrt Configuration # CONFIG_MODULES=y CONFIG_HAVE_DOT_CONFIG=y # CONFIG_TARGET_sunxi is not set # CONFIG_TARGET_apm821xx is not ",
-      "updated_at": "2026-11-19",
-      "query_used": "PayloadsAllTheThings OR owasp api security fuzzing python"
+      "description": "OSS-Fuzz - continuous fuzzing for open source software.",
+      "updated_at": "2026-11-20",
+      "query_used": "big-list-of-naughty-strings OR unicode fuzzing security"
     }
   ],
   "recommendations": [
