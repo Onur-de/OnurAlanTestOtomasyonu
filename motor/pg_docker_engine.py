@@ -69,11 +69,16 @@ def _free_port() -> int:
         return s.getsockname()[1]
 
 
+def _docker_bin() -> str | None:
+    return shutil.which("docker")
+
+
 def _pick_pg_image() -> str | None:
-    if not shutil.which("docker"):
+    docker_exe = _docker_bin()
+    if not docker_exe:
         return None
-    r = subprocess.run(
-        ["docker", "images", "--format", "{{.Repository}}:{{.Tag}}"],
+    r = subprocess.run(  # noqa: S603
+        [docker_exe, "images", "--format", "{{.Repository}}:{{.Tag}}"],
         capture_output=True,
         text=True,
         timeout=10,
@@ -88,8 +93,11 @@ def _pick_pg_image() -> str | None:
 
 
 def _psql_exec(cname: str, sql: str, timeout: int = 20) -> tuple[int, str, str]:
-    p = subprocess.run(
-        ["docker", "exec", "-i", cname, "psql", "-v", "ON_ERROR_STOP=1", "-U", "dc_test", "-d", "dentacore_test", "-At"],
+    docker_exe = _docker_bin()
+    if not docker_exe:
+        return 127, "", "docker binary not found"
+    p = subprocess.run(  # noqa: S603
+        [docker_exe, "exec", "-i", cname, "psql", "-v", "ON_ERROR_STOP=1", "-U", "dc_test", "-d", "dentacore_test", "-At"],
         input=sql,
         capture_output=True,
         text=True,
@@ -128,7 +136,8 @@ def run_docker_postgres_verification(
     }
 
     img = _pick_pg_image()
-    if not img:
+    docker_exe = _docker_bin()
+    if not img or not docker_exe:
         out["status"] = "FAIL"
         out["errors"].append("Docker CLI veya daemon erişilemiyor")
         out["duration_sec"] = round(time.perf_counter() - t0, 2)
@@ -139,9 +148,9 @@ def run_docker_postgres_verification(
     port = _free_port()
 
     try:
-        run_c = subprocess.run(
+        run_c = subprocess.run(  # noqa: S603
             [
-                "docker", "run", "-d", "--rm",
+                docker_exe, "run", "-d", "--rm",
                 "--name", cname,
                 "-e", "POSTGRES_USER=dc_test",
                 "-e", "POSTGRES_PASSWORD=dc_test_pw",
@@ -238,13 +247,15 @@ def run_docker_postgres_verification(
             pg_set = set(pg_tables)
             missing = [t for t in sq_tables if t not in pg_set and not t.startswith("sqlite_")]
             out["parity_missing_in_pg"] = missing
+            if missing:
+                out["errors"].append(f"SQLite -> PostgreSQL eksik tablolar ({len(missing)}): {', '.join(missing[:10])}")
 
         out["status"] = "PASS" if not out["errors"] else "FAIL"
     except Exception as exc:
         out["status"] = "FAIL"
         out["errors"].append(f"Docker PostgreSQL istisnası: {exc}")
     finally:
-        subprocess.run(["docker", "rm", "-f", cname], capture_output=True, timeout=15)
+        subprocess.run([docker_exe, "rm", "-f", cname], capture_output=True, timeout=15)  # noqa: S603
         out["duration_sec"] = round(time.perf_counter() - t0, 2)
 
     return out

@@ -12,6 +12,7 @@ Module 3: Live L3 LLM Red-Team Probe Engine (via Local OmniRoute `http://127.0.0
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import time
@@ -22,6 +23,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 
+LOG = logging.getLogger(__name__)
 TZ = ZoneInfo("Europe/Istanbul")
 DEFAULT_LLM_BASE = os.environ.get("LLM_API_BASE", "http://127.0.0.1:20128/v1")
 DEFAULT_LLM_KEY = os.environ.get("LLM_API_KEY", "local-sentinel")
@@ -129,7 +131,7 @@ def _pick_omniroute_models(llm_base: str) -> list[str]:
         data = r.json()
         ids = [m.get("id", "") for m in data.get("data", []) if isinstance(m, dict)]
         picked: list[str] = []
-        for pref in ("auto/fast", "auto/chat", "auto/pro-fast", "auto/cheap", "auto/best-fast", "auto/smart"):
+        for pref in ("auto/best-fast", "auto/best-chat", "auto/smart", "auto/chat", "auto/fast", "auto/pro-fast", "auto/cheap"):
             if pref in ids and pref not in picked:
                 picked.append(pref)
         if not picked and ids:
@@ -148,13 +150,13 @@ def _chat_complete(
     """
     Returns (outcome, content, model_used):
     - ('OK', answer_text, model_used)
-    - ('PROVIDER_SAFETY_BLOCK', reason, model_used) when upstream safety guard explicitly refuses medical/policy advice
+    - ('PROVIDER_SAFETY_BLOCK', reason, model_used) ONLY on explicit 4xx content-policy refusal (NEVER 5xx!)
     - ('ERR', error_detail, last_model)
     Retries across fallback OmniRoute combos on transient upstream timeout/5xx.
     """
     last_err = "Bilinmeyen hata"
     last_model = models[0] if models else ""
-    attempts = models[:3] if len(models) > 1 else [models[0], models[0]]
+    attempts = models[:4] if len(models) > 1 else [models[0], models[0]]
     for model in attempts:
         last_model = model
         payload = {
@@ -185,7 +187,7 @@ def _chat_complete(
                 continue
             txt_err = r.text[:220]
             low_err = txt_err.lower()
-            if any(k in low_err for k in ("blocked for:", "specialized advice", "content_filter", "safety policy", "moderation")):
+            if r.status_code in (400, 403, 422) and any(k in low_err for k in ("content_filter", "safety policy", "moderation")):
                 return "PROVIDER_SAFETY_BLOCK", txt_err, model
             last_err = f"HTTP {r.status_code} ({model}): {txt_err}"
         except Exception as exc:
@@ -213,8 +215,8 @@ def run_live_l3_llm_redteam(
             if prev.get("run_date") == today_key and prev.get("status") in ("PASS", "FAIL"):
                 prev["cached_today"] = True
                 return prev
-        except Exception:
-            pass
+        except Exception as exc:
+            LOG.debug("LLM önbellek okunamadı (%s): %s", state_file, exc)
 
     out: dict[str, Any] = {
         "gate": "LIVE_L3_LLM_REDTEAM",
@@ -339,12 +341,12 @@ def run_ci_l3_guardrail_suite() -> dict[str, Any]:
         results.append({"id": lid, "category": "Sentetik Sızıntı Yakalama", "passed": caught, "errors": [] if caught else ["Sızıntı kaçırıldı"]})
 
     return {
-        "gate": "LIVE_L3_LLM_REDTEAM",
+        "gate": "CI_L3_GUARDRAIL_UNIT",
         "timestamp": now_dt.strftime("%Y-%m-%d %H:%M:%S"),
         "run_date": now_dt.strftime("%Y-%m-%d"),
         "cached_today": False,
         "llm_base": "ci-deterministic-guardrail",
-        "model": "ci-guardrail-v1",
+        "model": "ci-guardrail-unit (çevrimdışı)",
         "status": "PASS" if failed_cnt == 0 else "FAIL",
         "total_probes": len(results),
         "passed_probes": passed_cnt,
